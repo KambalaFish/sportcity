@@ -11,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Ice_arena extends AbstractEntity<Long>{
+public class Ice_arena extends AbstractEntity<Integer>{
 
     @Column(name = "square")
     private Integer square;

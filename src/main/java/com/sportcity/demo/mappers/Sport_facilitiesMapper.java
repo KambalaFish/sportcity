@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 @Component
-public class Sport_facilitiesMapper extends AbstractMapper<Sport_facilities, Sport_facilitiesDTO, Long>{
+public class Sport_facilitiesMapper extends AbstractMapper<Sport_facilities, Sport_facilitiesDTO, Integer>{
 
     @Autowired
     private Volleyball_arenaRepository volleyball_arenaRepository;

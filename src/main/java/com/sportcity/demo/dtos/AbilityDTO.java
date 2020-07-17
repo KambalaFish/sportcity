@@ -8,13 +8,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AbilityDTO extends AbstractDTO<Long>{
+public class AbilityDTO extends AbstractDTO<Integer>{
 
-    static {
-        setEntityClass(Ability.class);
-    }
-
-    private Long sportsmanId;
+    private Integer sportsmanId;
     private Sport sport;
     private Integer level;
 }

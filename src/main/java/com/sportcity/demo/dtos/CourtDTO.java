@@ -7,9 +7,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class CourtDTO extends AbstractDTO<Long>{
-    static{
-        setEntityClass(Court.class);
-    }
+public class CourtDTO extends AbstractDTO<Integer>{
+
     private Coverage_type coverage_type;
 }

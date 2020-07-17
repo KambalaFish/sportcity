@@ -10,7 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Stadium extends AbstractEntity<Long>{
+public class Stadium extends AbstractEntity<Integer>{
     /*
     @Id
     @Column(name = "stadium_id")

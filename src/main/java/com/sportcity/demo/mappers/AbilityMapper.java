@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 @Component
-public class AbilityMapper extends AbstractMapper<Ability, AbilityDTO, Long>{
+public class AbilityMapper extends AbstractMapper<Ability, AbilityDTO, Integer>{
 
     @Autowired
     private SportsmanRepository sportsmanRepository;

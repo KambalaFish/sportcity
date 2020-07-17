@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 
-public class Sportsman extends AbstractEntity<Long> {
+public class Sportsman extends AbstractEntity<Integer> {
 
     @Column(name="name", nullable = false)
     private String name;

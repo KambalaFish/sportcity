@@ -6,10 +6,8 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class Volleyball_arenaDTO extends AbstractDTO<Long>{
-    static{
-        setEntityClass(Volleyball_arena.class);
-    }
+public class Volleyball_arenaDTO extends AbstractDTO<Integer>{
+
     private Integer net_height;
     private Integer net_width;
 }

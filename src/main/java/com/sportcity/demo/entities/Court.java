@@ -11,9 +11,9 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Court extends AbstractEntity<Long>{
+public class Court extends AbstractEntity<Integer>{
 
-    @Column(name="coverage_type")
+    @Column(name="coverage_type", nullable = false, columnDefinition = "enum('grass', 'clay')")
     @Enumerated(EnumType.STRING)
     private Coverage_type coverage_type;
 

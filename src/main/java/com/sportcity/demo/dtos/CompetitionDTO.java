@@ -9,10 +9,7 @@ import java.sql.Date;
 
 @Getter
 @Setter
-public class CompetitionDTO extends AbstractDTO<Long> {
-    static {
-        setEntityClass(Competition.class);
-    }
+public class CompetitionDTO extends AbstractDTO<Integer> {
     private Date date;
     private Sport sport;
 }

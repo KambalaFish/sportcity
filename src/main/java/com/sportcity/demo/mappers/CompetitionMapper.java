@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 @Component
-public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDTO, Long> {
+public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDTO, Integer> {
 
     @Autowired
     public CompetitionMapper(ModelMapper mapper){

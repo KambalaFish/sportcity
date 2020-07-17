@@ -13,12 +13,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Competition extends AbstractEntity<Long> {
+public class Competition extends AbstractEntity<Integer> {
 
     @Column(name = "c_date")
     private Date date;
 
-    @Column(name="sport", nullable = false)
+    @Column(name="sport", nullable = false, columnDefinition = "enum('football', 'tennis', 'hockey', 'volleyball')")
     @Enumerated(EnumType.STRING)
     private Sport sport;
 

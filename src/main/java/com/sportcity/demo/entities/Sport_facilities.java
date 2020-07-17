@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Sport_facilities extends AbstractEntity<Long>{
+public class Sport_facilities extends AbstractEntity<Integer>{
     /*
     @Id
     @Access(value = AccessType.PROPERTY)

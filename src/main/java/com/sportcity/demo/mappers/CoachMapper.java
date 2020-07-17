@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 @Component
-public class CoachMapper extends AbstractMapper<Coach, CoachDTO, Long>{
+public class CoachMapper extends AbstractMapper<Coach, CoachDTO, Integer>{
 
     @Autowired
     public CoachMapper(ModelMapper mapper){

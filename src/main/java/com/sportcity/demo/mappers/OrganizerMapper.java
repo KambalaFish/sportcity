@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 @Component
-public class OrganizerMapper extends AbstractMapper<Organizer, OrganizerDTO, Long>{
+public class OrganizerMapper extends AbstractMapper<Organizer, OrganizerDTO, Integer>{
 
     @Autowired
     public OrganizerMapper(ModelMapper mapper){

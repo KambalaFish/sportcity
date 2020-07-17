@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface Ice_arenaRepository extends JpaRepository<Ice_arena, Long> {
+public interface Ice_arenaRepository extends JpaRepository<Ice_arena, Integer> {
 }

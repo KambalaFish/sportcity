@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Organizer extends AbstractEntity<Long>{
+public class Organizer extends AbstractEntity<Integer>{
 
     @Column(name="name", nullable = false)
     private String name;

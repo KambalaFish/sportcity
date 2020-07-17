@@ -11,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Volleyball_arena extends AbstractEntity<Long>{
+public class Volleyball_arena extends AbstractEntity<Integer>{
 
     @Column(name = "net_height")
     private Integer net_height;

@@ -1,35 +1,14 @@
 package com.sportcity.demo;
 
-import com.googlecode.flyway.core.Flyway;
-import com.mysql.cj.jdbc.MysqlDataSource;
-import org.hibernate.jpa.HibernatePersistenceProvider;
+
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.transaction.PlatformTransactionManager;
-
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-import java.util.Properties;
 
 
 @Configuration
-public class AppConfiguration implements RepositoryRestConfigurer {
-
-    @Bean
-    public Flyway flyway(DataSource dataSource) {
-        Flyway flyway = new Flyway();
-        flyway.setDataSource(dataSource);
-        flyway.setLocations("db/migration");
-        flyway.migrate();
-        return flyway;
-    }
+public class AppConfiguration {
 
     @Bean
     public ModelMapper modelMapper(){
@@ -39,6 +18,15 @@ public class AppConfiguration implements RepositoryRestConfigurer {
                 .setFieldMatchingEnabled(true)
                 .setSkipNullEnabled(true);
         return mapper;
+    }
+    /*
+    @Bean
+    public Flyway flyway(DataSource dataSource) {
+        Flyway flyway = new Flyway();
+        flyway.setDataSource(dataSource);
+        flyway.setLocations("db/migration");
+        flyway.migrate();
+        return flyway;
     }
 
     @Bean
@@ -71,4 +59,5 @@ public class AppConfiguration implements RepositoryRestConfigurer {
         txManager.setEntityManagerFactory(entityManagerFactory);
         return txManager;
     }
+    */
 }

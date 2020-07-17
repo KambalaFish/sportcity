@@ -12,13 +12,13 @@ import javax.persistence.*;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 
-public class Ability extends AbstractEntity<Long> {
+public class Ability extends AbstractEntity<Integer> {
 
     @ManyToOne
     @JoinColumn(name = "sportsman_id", nullable = false)
     private Sportsman sportsman;
 
-    @Column(name="sport", nullable = false)
+    @Column(name="sport", nullable = false, columnDefinition = "enum('football', 'tennis', 'hockey', 'volleyball')")
     @Enumerated(EnumType.STRING)
     private Sport sport;
 

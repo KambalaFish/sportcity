@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 @Component
-public class CourtMapper extends AbstractMapper<Court, CourtDTO, Long>{
+public class CourtMapper extends AbstractMapper<Court, CourtDTO, Integer>{
 
     @Autowired
     private Sport_facilitiesRepository sport_facilitiesRepository;

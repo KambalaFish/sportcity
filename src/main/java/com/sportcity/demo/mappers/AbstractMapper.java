@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Objects;
 
 @Getter
 public class AbstractMapper<E extends AbstractEntity<ID>, DTO extends AbstractDTO<ID>, ID extends Serializable> implements IMapper<E, DTO, ID> {
@@ -54,11 +55,14 @@ public class AbstractMapper<E extends AbstractEntity<ID>, DTO extends AbstractDT
 
     @Override
     public E toEntity(DTO dto) {
-        return dto == null ? null : mapper.map(dto, entityClass);
+        return Objects.isNull(dto)? null : mapper.map(dto, entityClass);
     }
 
     @Override
     public DTO toDTO(E entity) {
-        return entity == null ? null : mapper.map(entity, DTOClass);
+        return Objects.isNull(entity)
+                ? null
+                : mapper.map(entity, DTOClass);
     }
+
 }

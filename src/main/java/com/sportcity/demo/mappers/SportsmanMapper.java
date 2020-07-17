@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 @Component
-public class SportsmanMapper extends AbstractMapper<Sportsman, SportsmanDTO, Long> {
+public class SportsmanMapper extends AbstractMapper<Sportsman, SportsmanDTO, Integer> {
 
     @Autowired
     public SportsmanMapper(ModelMapper mapper){

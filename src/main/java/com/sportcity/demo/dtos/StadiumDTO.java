@@ -6,10 +6,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class StadiumDTO extends AbstractDTO<Long>{
-    static {
-        setEntityClass(Stadium.class);
-    }
+public class StadiumDTO extends AbstractDTO<Integer>{
 
     private Integer capacity;
 

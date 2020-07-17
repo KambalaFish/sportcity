@@ -6,9 +6,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class Ice_arenaDTO extends AbstractDTO<Long>{
-    static {
-        setEntityClass(Ice_arena.class);
-    }
+public class Ice_arenaDTO extends AbstractDTO<Integer>{
+
     private Integer square;
 }

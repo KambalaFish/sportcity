@@ -8,8 +8,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Sport_facilitiesDTO extends AbstractDTO<Long> {
-    static {
-        setEntityClass(Sport_facilities.class);
-    }
+public class Sport_facilitiesDTO extends AbstractDTO<Integer> {
+
 }

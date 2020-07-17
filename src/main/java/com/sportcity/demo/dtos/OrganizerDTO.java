@@ -6,10 +6,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OrganizerDTO extends AbstractDTO<Long>{
-    static {
-        setEntityClass(Organizer.class);
-    }
+public class OrganizerDTO extends AbstractDTO<Integer>{
+
 
     private String name;
 }

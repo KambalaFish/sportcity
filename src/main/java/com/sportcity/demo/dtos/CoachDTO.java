@@ -7,10 +7,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CoachDTO extends AbstractDTO<Long>{
-    static {
-        setEntityClass(Coach.class);
-    }
+public class CoachDTO extends AbstractDTO<Integer>{
+
     private String name;
     private Sport sport;
 }
