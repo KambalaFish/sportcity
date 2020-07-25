@@ -22,8 +22,7 @@ public class StadiumMapper extends AbstractMapper<Stadium, StadiumDTO, Integer>{
 
     @PostConstruct
     private void setupMapper(){
-        mapper.createTypeMap(Stadium.class, StadiumDTO.class).setPostConverter(toDTOConverter());
-        mapper.createTypeMap(StadiumDTO.class, Stadium.class).addMappings(m -> m.skip(Stadium::setSport_facility)).setPostConverter(toEntityConverter());
+        skipEntityField(Stadium::setSport_facility);
     }
 
     @Override

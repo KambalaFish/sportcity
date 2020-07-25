@@ -16,9 +16,4 @@ public class OrganizerMapper extends AbstractMapper<Organizer, OrganizerDTO, Int
         super(mapper, Organizer.class, OrganizerDTO.class);
     }
 
-    @PostConstruct
-    private void setupMapper(){
-        mapper.createTypeMap(Organizer.class, OrganizerDTO.class).setPostConverter(toDTOConverter());
-        mapper.createTypeMap(OrganizerDTO.class, Organizer.class).setPostConverter(toEntityConverter());
-    }
 }

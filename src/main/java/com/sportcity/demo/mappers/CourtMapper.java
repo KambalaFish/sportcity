@@ -22,13 +22,14 @@ public class CourtMapper extends AbstractMapper<Court, CourtDTO, Integer>{
 
     @PostConstruct
     private void setupMapper(){
-        mapper.createTypeMap(Court.class, CourtDTO.class).setPostConverter(toDTOConverter());
-        mapper.createTypeMap(CourtDTO.class, Court.class).addMappings(m -> m.skip(Court::setSport_facility)).setPostConverter(toEntityConverter());
+        skipEntityField(Court::setSport_facility);
     }
 
     @Override
     protected void mapDTOToEntity(CourtDTO DTO, Court entity) {
         if (sport_facilitiesRepository.findById(DTO.getId()).isPresent())
-            entity.setSport_facility(sport_facilitiesRepository.findById(DTO.getId()).get());
+            entity.setSport_facility(getEntityByIdOrThrow(sport_facilitiesRepository, DTO.getId()));
+
+
     }
 }

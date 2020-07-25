@@ -1,15 +1,20 @@
 package com.sportcity.demo.mappers;
 
 import com.sportcity.demo.dtos.CoachDTO;
+import com.sportcity.demo.dtos.SportsmanDTO;
 import com.sportcity.demo.entities.Coach;
+import com.sportcity.demo.entities.Sportsman;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class CoachMapper extends AbstractMapper<Coach, CoachDTO, Integer>{
+
 
     @Autowired
     public CoachMapper(ModelMapper mapper){
@@ -18,8 +23,8 @@ public class CoachMapper extends AbstractMapper<Coach, CoachDTO, Integer>{
 
     @PostConstruct
     private void setupMapper(){
-        mapper.createTypeMap(Coach.class, CoachDTO.class).setPostConverter(toDTOConverter());
-        mapper.createTypeMap(CoachDTO.class, Coach.class).addMappings(m -> m.skip(Coach::setSportsmen)).setPostConverter(toEntityConverter());
+        skipEntityField(Coach::setSportsmen);
+        skipDTOField(CoachDTO::setSportsmen);
     }
 
     @Override

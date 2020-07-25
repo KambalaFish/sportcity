@@ -22,8 +22,7 @@ public class Ice_arenaMapper extends AbstractMapper<Ice_arena, Ice_arenaDTO, Int
 
     @PostConstruct
     private void setupMapper(){
-        mapper.createTypeMap(Ice_arena.class, Ice_arenaDTO.class).setPostConverter(toDTOConverter());
-        mapper.createTypeMap(Ice_arenaDTO.class, Ice_arena.class).addMappings(m -> m.skip(Ice_arena::setSport_facility)).setPostConverter(toEntityConverter());
+        skipEntityField(Ice_arena::setSport_facility);
     }
 
     @Override

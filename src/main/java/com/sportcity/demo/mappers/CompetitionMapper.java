@@ -18,9 +18,4 @@ public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDT
         super(mapper, Competition.class, CompetitionDTO.class);
     }
 
-    @PostConstruct
-    private void setupMapper(){
-        mapper.createTypeMap(Competition.class, CompetitionDTO.class).setPostConverter(toDTOConverter());
-        mapper.createTypeMap(CompetitionDTO.class, Competition.class).setPostConverter(toEntityConverter());
-    }
 }

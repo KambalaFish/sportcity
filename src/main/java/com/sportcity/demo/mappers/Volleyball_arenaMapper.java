@@ -22,8 +22,7 @@ public class Volleyball_arenaMapper extends AbstractMapper<Volleyball_arena, Vol
 
     @PostConstruct
     private void setupMapper(){
-        mapper.createTypeMap(Volleyball_arena.class, Volleyball_arenaDTO.class).setPostConverter(toDTOConverter());
-        mapper.createTypeMap(Volleyball_arenaDTO.class, Volleyball_arena.class).addMappings(m -> m.skip(Volleyball_arena::setSport_facility)).setPostConverter(toEntityConverter());
+        skipEntityField(Volleyball_arena::setSport_facility);
     }
 
     @Override

@@ -23,6 +23,6 @@ public class Ability extends AbstractEntity<Integer> {
     private Sport sport;
 
     @Column(name = "category")
-    private int level;
+    private Integer level;
 
 }

@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class AbilityDTO extends AbstractDTO<Integer>{
 
-    private Integer sportsmanId;
+    private SportsmanDTO sportsman;
     private Sport sport;
     private Integer level;
 }

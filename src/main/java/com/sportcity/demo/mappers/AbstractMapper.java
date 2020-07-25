@@ -5,17 +5,24 @@ import com.sportcity.demo.entities.AbstractEntity;
 import lombok.Getter;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
+import org.modelmapper.spi.DestinationSetter;
+import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Objects;
 
-@Getter
+
 public class AbstractMapper<E extends AbstractEntity<ID>, DTO extends AbstractDTO<ID>, ID extends Serializable> implements IMapper<E, DTO, ID> {
 
-    public static final HashMap<Class, AbstractMapper> mappers = new HashMap<>();
-
+    @Getter
     protected ModelMapper mapper;
+
+    private final TypeMap<E, DTO> entityToDtoTypeMap;
+    private final TypeMap<DTO, E> dtoToEntityTypeMap;
+
     private Class<E> entityClass;
     private Class<DTO> DTOClass;
 
@@ -24,7 +31,9 @@ public class AbstractMapper<E extends AbstractEntity<ID>, DTO extends AbstractDT
         this.mapper = mapper;
         this.entityClass = entityClass;
         this.DTOClass = DTOClass;
-        mappers.put(entityClass, this);
+
+        entityToDtoTypeMap = mapper.createTypeMap(entityClass, DTOClass).setPostConverter(toDTOConverter());
+        dtoToEntityTypeMap = mapper.createTypeMap(DTOClass, entityClass).setPostConverter(toEntityConverter());
     }
 
     public Converter<E, DTO> toDTOConverter() {
@@ -53,6 +62,18 @@ public class AbstractMapper<E extends AbstractEntity<ID>, DTO extends AbstractDT
 
     }
 
+    protected <V> void skipDTOField(DestinationSetter<DTO, V> destinationSetter){
+        entityToDtoTypeMap.addMappings(m -> m.skip(destinationSetter));
+    }
+
+    protected <V> void skipEntityField(DestinationSetter<E,V> destinationSetter){
+        dtoToEntityTypeMap.addMappings(m -> m.skip(destinationSetter));
+    }
+
+    protected <X, I> X getEntityByIdOrThrow(JpaRepository<X, I> repository, I id){
+        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Entity with id %s was not found", id)));
+    }
+
     @Override
     public E toEntity(DTO dto) {
         return Objects.isNull(dto)? null : mapper.map(dto, entityClass);
@@ -60,9 +81,7 @@ public class AbstractMapper<E extends AbstractEntity<ID>, DTO extends AbstractDT
 
     @Override
     public DTO toDTO(E entity) {
-        return Objects.isNull(entity)
-                ? null
-                : mapper.map(entity, DTOClass);
+        return Objects.isNull(entity) ? null : mapper.map(entity, DTOClass);
     }
 
 }
