@@ -15,4 +15,5 @@ public class SportsmanDTO extends AbstractDTO<Integer>{
     private String club_name;
 
     private List<CoachDTO> coaches = new ArrayList<>();
+    private List<CompetitionDTO> competitions = new ArrayList<>();
 }

@@ -15,6 +15,9 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 public class Competition extends AbstractEntity<Integer> {
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "c_date")
     private Date date;
 
@@ -23,7 +26,7 @@ public class Competition extends AbstractEntity<Integer> {
     private Sport sport;
 
     @ManyToMany(mappedBy = "competitions")
-    private List<Sportsman> sporsmen;
+    private List<Sportsman> sportsmen;
 
     @ManyToMany
     @JoinTable(

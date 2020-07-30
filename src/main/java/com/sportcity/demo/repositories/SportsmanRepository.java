@@ -19,4 +19,7 @@ public interface SportsmanRepository extends JpaRepository<Sportsman, Integer> {
     @Query("select distinct s from Sportsman s join s.coaches c where c.id = :coachId")
     Page<Sportsman> getAllSportsmenByCoachId(@Param("coachId") Integer coachId, Pageable pageable);
 
+    @Query("select distinct s from Sportsman s join s.competitions c where c.id = :competitionId")
+    Page<Sportsman> getAllSportsmenByCompetitionId(@Param("competitionId") Integer competitionId, Pageable pageable);
+
 }

@@ -49,4 +49,16 @@ public class CoachServiceImpl extends AbstractService<Coach, CoachDTO, Integer> 
     public Page<SportsmanDTO> getSportsmenOfTheCoach(Integer coachId, Pageable pageable) {
         return sportsmanRepository.getAllSportsmenByCoachId(coachId, pageable).map(sportsmanMapper::toDTO);
     }
+
+    @Override
+    public void removeLinkWithSportsman(Integer coachId, Integer sportsmanId) {
+        Coach coach = repository.findById(coachId).get();
+        Sportsman sportsman = sportsmanRepository.findById(sportsmanId).get();
+
+        coach.getSportsmen().remove(sportsman);
+        sportsman.getCoaches().remove(coach);
+
+        repository.save(coach);
+        sportsmanRepository.save(sportsman);
+    }
 }

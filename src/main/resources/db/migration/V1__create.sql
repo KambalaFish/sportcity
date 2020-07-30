@@ -87,6 +87,7 @@ CREATE TABLE IF NOT EXISTS `sportcity`.`abilities` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sportcity`.`competition` (
                                                          `id` INT NOT NULL AUTO_INCREMENT,
+                                                         `name` VARCHAR(100) NOT NULL,
                                                          `c_date` DATE NOT NULL,
                                                          `sport` ENUM('football', 'tennis', 'hockey', 'volleyball') NOT NULL,
                                                          PRIMARY KEY (`id`))

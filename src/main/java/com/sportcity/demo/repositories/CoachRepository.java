@@ -1,8 +1,6 @@
 package com.sportcity.demo.repositories;
 
-import com.sportcity.demo.dtos.CoachDTO;
 import com.sportcity.demo.entities.Coach;
-import com.sportcity.demo.entities.Sportsman;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

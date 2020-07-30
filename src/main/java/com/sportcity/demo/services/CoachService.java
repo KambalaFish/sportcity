@@ -8,4 +8,6 @@ import org.springframework.data.domain.Pageable;
 public interface CoachService extends Service<CoachDTO, Integer>{
 
     Page<SportsmanDTO> getSportsmenOfTheCoach(Integer coachId, Pageable pageable);
+
+    void removeLinkWithSportsman(Integer coachId, Integer sportsmanId);
 }

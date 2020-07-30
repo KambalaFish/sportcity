@@ -2,13 +2,16 @@ package com.sportcity.demo.services.impl;
 
 import com.sportcity.demo.dtos.AbilityDTO;
 import com.sportcity.demo.dtos.CoachDTO;
+import com.sportcity.demo.dtos.CompetitionDTO;
 import com.sportcity.demo.dtos.SportsmanDTO;
 import com.sportcity.demo.entities.Ability;
 import com.sportcity.demo.entities.Coach;
+import com.sportcity.demo.entities.Competition;
 import com.sportcity.demo.entities.Sportsman;
 import com.sportcity.demo.mappers.IMapper;
 import com.sportcity.demo.repositories.AbilityRepository;
 import com.sportcity.demo.repositories.CoachRepository;
+import com.sportcity.demo.repositories.CompetitionRepository;
 import com.sportcity.demo.repositories.SportsmanRepository;
 import com.sportcity.demo.services.SportsmanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,23 +26,29 @@ public class SportsmanServiceImpl extends AbstractService<Sportsman, SportsmanDT
     private final SportsmanRepository repository;
     private final AbilityRepository abilityRepository;
     private final CoachRepository coachRepository;
+    private final CompetitionRepository competitionRepository;
     private final IMapper<Sportsman, SportsmanDTO, Integer> mapper;
     private final IMapper<Ability, AbilityDTO, Integer> abilityMapper;
     private final IMapper<Coach, CoachDTO, Integer> coachMapper;
+    private final IMapper<Competition, CompetitionDTO, Integer> competitionMapper;
 
     @Autowired
     public SportsmanServiceImpl(SportsmanRepository repository,
                                 AbilityRepository abilityRepository,
                                 CoachRepository coachRepository,
+                                CompetitionRepository competitionRepository,
                                 IMapper<Sportsman, SportsmanDTO, Integer> mapper,
                                 IMapper<Ability, AbilityDTO, Integer> abilityMapper,
-                                IMapper<Coach, CoachDTO, Integer> coachMapper){
+                                IMapper<Coach, CoachDTO, Integer> coachMapper,
+                                IMapper<Competition, CompetitionDTO, Integer> competitionMapper){
         this.repository = repository;
         this.abilityRepository = abilityRepository;
         this.coachRepository = coachRepository;
+        this.competitionRepository = competitionRepository;
         this.mapper = mapper;
         this.abilityMapper = abilityMapper;
         this.coachMapper = coachMapper;
+        this.competitionMapper = competitionMapper;
     }
 
     @Override
@@ -63,7 +72,7 @@ public class SportsmanServiceImpl extends AbstractService<Sportsman, SportsmanDT
     }
 
     @Override
-    public SportsmanDTO removeLinkWithCoach(Integer sportsmanId, Integer coachId) {
+    public void removeLinkWithCoach(Integer sportsmanId, Integer coachId) {
         Sportsman sportsman = repository.findById(sportsmanId).get();
         Coach coach = coachRepository.findById(coachId).get();
         sportsman.getCoaches().remove(coach);
@@ -72,6 +81,24 @@ public class SportsmanServiceImpl extends AbstractService<Sportsman, SportsmanDT
         repository.save(sportsman);
         coachRepository.save(coach);
 
+        //return mapper.toDTO(sportsman);
+    }
+
+    public Page<CompetitionDTO> getCompetitionsOfTheSportsman(Integer sportsmanId, Pageable pageable){
+        return competitionRepository.getAllCompetitionsBySportsmanId(sportsmanId, pageable).map(competitionMapper::toDTO);
+    }
+
+    @Override
+    public SportsmanDTO removeLinkWithCompetition(Integer sportsmanId, Integer competitionId) {
+        Sportsman sportsman = repository.findById(sportsmanId).get();
+        Competition competition = competitionRepository.findById(competitionId).get();
+        sportsman.getCompetitions().remove(competition);
+        competition.getSportsmen().remove(sportsman);
+
+        repository.save(sportsman);
+        competitionRepository.save(competition);
+
         return mapper.toDTO(sportsman);
     }
+
 }

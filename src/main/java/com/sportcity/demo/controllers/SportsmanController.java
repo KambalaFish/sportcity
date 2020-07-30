@@ -3,6 +3,7 @@ package com.sportcity.demo.controllers;
 
 import com.sportcity.demo.dtos.AbilityDTO;
 import com.sportcity.demo.dtos.CoachDTO;
+import com.sportcity.demo.dtos.CompetitionDTO;
 import com.sportcity.demo.dtos.SportsmanDTO;
 import com.sportcity.demo.services.Service;
 import com.sportcity.demo.services.SportsmanService;
@@ -34,9 +35,20 @@ public class SportsmanController extends AbstractController<SportsmanDTO, Intege
     }
 
     @PostMapping("/{id}/removeCoach/{coachId}")
-    public ResponseEntity<Page<CoachDTO>> removeCoachFromSportsman(@PathVariable Integer id, @PathVariable Integer coachId, Pageable pageable){
+    public ResponseEntity<Void> removeCoachFromSportsman(@PathVariable Integer id, @PathVariable Integer coachId){
         sportsmanService.removeLinkWithCoach(id, coachId);
-        return getCoaches(id, pageable);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/competitions")
+    public ResponseEntity<Page<CompetitionDTO>> getCompetitions(@PathVariable Integer id, Pageable pageable){
+        return ResponseEntity.ok(sportsmanService.getCompetitionsOfTheSportsman(id, pageable));
+    }
+
+    @PostMapping("/{id}/removeCompetition/{competitionId}")
+    public ResponseEntity<Void> removeCompetitionFromSportsman(@PathVariable Integer id, @PathVariable Integer competitionId){
+        sportsmanService.removeLinkWithCompetition(id, competitionId);
+        return ResponseEntity.ok().build();
     }
 
     @Override

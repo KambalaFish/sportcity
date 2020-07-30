@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/coach")
@@ -27,6 +24,12 @@ public class CoachController extends AbstractController<CoachDTO, Integer>{
     @GetMapping("/{id}/sportsmen")
     public ResponseEntity<Page<SportsmanDTO>> getSportsmen(@PathVariable Integer id, Pageable pageable){
         return ResponseEntity.ok(coachService.getSportsmenOfTheCoach(id, pageable));
+    }
+
+    @PostMapping("/{id}/removeSportsman/{sportsmanId}")
+    public ResponseEntity<Void>removeCoachFromSportsman(@PathVariable Integer id, @PathVariable Integer sportsmanId){
+        coachService.removeLinkWithSportsman(id, sportsmanId);
+        return ResponseEntity.ok().build();
     }
 
     @Override
