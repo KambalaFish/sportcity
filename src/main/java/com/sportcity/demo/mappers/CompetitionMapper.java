@@ -1,14 +1,9 @@
 package com.sportcity.demo.mappers;
 
-import com.sportcity.demo.dtos.CoachDTO;
-import com.sportcity.demo.dtos.CompetitionDTO;
-import com.sportcity.demo.dtos.OrganizerDTO;
-import com.sportcity.demo.dtos.SportsmanDTO;
-import com.sportcity.demo.entities.Coach;
-import com.sportcity.demo.entities.Competition;
-import com.sportcity.demo.entities.Organizer;
-import com.sportcity.demo.entities.Sportsman;
+import com.sportcity.demo.dtos.*;
+import com.sportcity.demo.entities.*;
 import com.sportcity.demo.repositories.OrganizerRepository;
+import com.sportcity.demo.repositories.SportFacilityRepository;
 import com.sportcity.demo.repositories.SportsmanRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +18,19 @@ public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDT
 
     private final SportsmanRepository sportsmanRepository;
     private final OrganizerRepository organizerRepository;
+    private final SportFacilityRepository sportFacilityRepository;
 
     @Autowired
-    public CompetitionMapper(ModelMapper mapper,
-                             SportsmanRepository sportsmanRepository,
-                             OrganizerRepository organizerRepository){
+    public CompetitionMapper(
+            ModelMapper mapper,
+            SportsmanRepository sportsmanRepository,
+            OrganizerRepository organizerRepository,
+            SportFacilityRepository sportFacilityRepository
+    ){
         super(mapper, Competition.class, CompetitionDTO.class);
         this.sportsmanRepository = sportsmanRepository;
         this.organizerRepository = organizerRepository;
+        this.sportFacilityRepository = sportFacilityRepository;
     }
 
     @PostConstruct
@@ -41,24 +41,27 @@ public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDT
         skipDTOField(CompetitionDTO::setOrganizers);
         skipEntityField(Competition::setOrganizers);
 
-        skipEntityField(Competition::setSports_facility);
+        skipEntityField(Competition::setSportFacilities);
+        skipDTOField(CompetitionDTO::setSportFacilities);
 
     }
 
     protected void mapDTOToEntity(CompetitionDTO sourceDTO, Competition destination){
+
         List<Sportsman> sportsmen = new ArrayList<>();
-        for(SportsmanDTO sportsmanDTO : sourceDTO.getSportsmen()){
-            Sportsman sportsman = getEntityByIdOrThrow(sportsmanRepository, sportsmanDTO.getId());
-            sportsmen.add(sportsman);
-        }
+        if (sourceDTO.getSportsmen()!=null)
+            sourceDTO.getSportsmen().forEach(sportsmanDTO -> sportsmen.add(getEntityByIdOrThrow(sportsmanRepository, sportsmanDTO.getId())));
         destination.setSportsmen(sportsmen);
 
         List<Organizer> organizers = new ArrayList<>();
-        for(OrganizerDTO organizerDTO : sourceDTO.getOrganizers()){
-            Organizer organizer = getEntityByIdOrThrow(organizerRepository, organizerDTO.getId());
-            organizers.add(organizer);
-        }
+        if (sourceDTO.getOrganizers()!=null)
+            sourceDTO.getOrganizers().forEach(organizerDTO -> organizers.add(getEntityByIdOrThrow(organizerRepository, organizerDTO.getId())));
         destination.setOrganizers(organizers);
+
+        List<SportFacility> sportFacilities = new ArrayList<>();
+        if (sourceDTO.getSportFacilities()!=null)
+            sourceDTO.getSportFacilities().forEach( sportFacilityDTO -> sportFacilities.add(getEntityByIdOrThrow(sportFacilityRepository, sportFacilityDTO.getId())));
+        destination.setSportFacilities(sportFacilities);
     }
 
     @Override
@@ -81,6 +84,52 @@ public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDT
             organizersDTO.add(organizerDTO);
         }
         DTO.setOrganizers(organizersDTO);
+
+        List<SportFacilityDTO> sportFacilitiesDTO = new ArrayList<>();
+        for(SportFacility sportFacility : entity.getSportFacilities()){
+
+            SportFacilityDTO sportFacilityDTO = new SportFacilityDTO();
+            sportFacilityDTO.setId(sportFacility.getId());
+
+            Stadium stadium = sportFacility.getStadium();
+            if(stadium !=null){
+                StadiumDTO stadiumDTO = new StadiumDTO();
+                stadiumDTO.setId(stadium.getId());
+                stadiumDTO.setCapacity(stadium.getCapacity());
+                //stadiumDTO.setSportFacilityDTO(sportFacilityDTO);
+                sportFacilityDTO.setStadium(stadiumDTO);
+            }
+
+            IceArena iceArena = sportFacility.getIceArena();
+            if(iceArena!=null){
+                IceArenaDTO iceArenaDTO = new IceArenaDTO();
+                iceArenaDTO.setId(iceArena.getId());
+                iceArenaDTO.setSquare(iceArena.getSquare());
+                //iceArenaDTO.setSportFacilityDTO(sportFacilityDTO);
+                sportFacilityDTO.setIceArena(iceArenaDTO);
+            }
+
+            Court court = sportFacility.getCourt();
+            if (court!=null){
+                CourtDTO courtDTO = new CourtDTO();
+                courtDTO.setId(court.getId());
+                courtDTO.setCoverageType(court.getCoverageType());
+                //courtDTO.setSportFacilityDTO(sportFacilityDTO);
+                sportFacilityDTO.setCourt(courtDTO);
+            }
+
+            VolleyballArena volleyballArena = sportFacility.getVolleyballArena();
+            if (volleyballArena!=null){
+                VolleyballArenaDTO volleyballArenaDTO = new VolleyballArenaDTO();
+                volleyballArenaDTO.setId(volleyballArena.getId());
+                volleyballArenaDTO.setNet_height(volleyballArena.getNet_height());
+                volleyballArenaDTO.setNet_width(volleyballArena.getNet_width());
+                //volleyballArenaDTO.setSportFacilityDTO(sportFacilityDTO);
+                sportFacilityDTO.setVolleyballArena(volleyballArenaDTO);
+            }
+            sportFacilitiesDTO.add(sportFacilityDTO);
+        }
+        DTO.setSportFacilities(sportFacilitiesDTO);
     }
 
 }

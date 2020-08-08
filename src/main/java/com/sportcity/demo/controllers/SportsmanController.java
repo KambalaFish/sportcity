@@ -5,6 +5,7 @@ import com.sportcity.demo.dtos.AbilityDTO;
 import com.sportcity.demo.dtos.CoachDTO;
 import com.sportcity.demo.dtos.CompetitionDTO;
 import com.sportcity.demo.dtos.SportsmanDTO;
+import com.sportcity.demo.filters.SportsmanFilter;
 import com.sportcity.demo.services.Service;
 import com.sportcity.demo.services.SportsmanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,11 @@ public class SportsmanController extends AbstractController<SportsmanDTO, Intege
     public ResponseEntity<Void> removeCompetitionFromSportsman(@PathVariable Integer id, @PathVariable Integer competitionId){
         sportsmanService.removeLinkWithCompetition(id, competitionId);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<Page<SportsmanDTO>> search(@RequestBody SportsmanFilter filter, Pageable pageable){
+        return ResponseEntity.ok(sportsmanService.search(filter, pageable));
     }
 
     @Override

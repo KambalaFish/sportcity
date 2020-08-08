@@ -8,6 +8,7 @@ import com.sportcity.demo.entities.Ability;
 import com.sportcity.demo.entities.Coach;
 import com.sportcity.demo.entities.Competition;
 import com.sportcity.demo.entities.Sportsman;
+import com.sportcity.demo.filters.SportsmanFilter;
 import com.sportcity.demo.mappers.IMapper;
 import com.sportcity.demo.repositories.AbilityRepository;
 import com.sportcity.demo.repositories.CoachRepository;
@@ -99,6 +100,16 @@ public class SportsmanServiceImpl extends AbstractService<Sportsman, SportsmanDT
         competitionRepository.save(competition);
 
         return mapper.toDTO(sportsman);
+    }
+
+    @Override
+    public Page<SportsmanDTO> search(SportsmanFilter filter, Pageable pageable) {
+        return repository.searchByFilter(
+                filter.getSport(),
+                filter.getMinLevel(),
+                filter.getMaxLevel(),
+                pageable
+        ).map(getMapper()::toDTO);
     }
 
 }

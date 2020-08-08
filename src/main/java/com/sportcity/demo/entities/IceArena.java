@@ -11,12 +11,13 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Ice_arena extends AbstractEntity<Integer>{
+public class IceArena extends AbstractEntitySF<Integer>{
+
 
     @Column(name = "square")
     private Integer square;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")
-    private Sport_facilities sport_facility;
+    private SportFacility sportFacility;
 }

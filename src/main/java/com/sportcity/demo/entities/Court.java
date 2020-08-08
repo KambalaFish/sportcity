@@ -1,6 +1,6 @@
 package com.sportcity.demo.entities;
 
-import com.sportcity.demo.entities.types.Coverage_type;
+import com.sportcity.demo.entities.types.CoverageType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,14 +11,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Court extends AbstractEntity<Integer>{
+public class Court extends AbstractEntitySF<Integer>{
 
     @Column(name="coverage_type", nullable = false, columnDefinition = "enum('grass', 'clay')")
     @Enumerated(EnumType.STRING)
-    private Coverage_type coverage_type;
+    private CoverageType coverageType;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")
-    private Sport_facilities sport_facility;
+    private SportFacility sportFacility;
 
 }

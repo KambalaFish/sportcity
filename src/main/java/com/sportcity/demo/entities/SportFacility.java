@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Sport_facilities extends AbstractEntity<Integer>{
+public class SportFacility extends AbstractEntitySF<Integer>{
     /*
     @Id
     @Access(value = AccessType.PROPERTY)
@@ -20,18 +20,18 @@ public class Sport_facilities extends AbstractEntity<Integer>{
     private Long id;
     */
 
-    @ManyToMany(mappedBy = "sports_facility")
+    @ManyToMany(mappedBy = "sportFacilities")
     private List<Competition> competitions;
 
-    @OneToOne(mappedBy = "sport_facility", cascade=CascadeType.ALL)
+    @OneToOne(mappedBy = "sportFacility", cascade=CascadeType.ALL)
     private Court court;
 
-    @OneToOne(mappedBy = "sport_facility", cascade=CascadeType.ALL)
+    @OneToOne(mappedBy = "sportFacility", cascade=CascadeType.ALL)
     private Stadium stadium;
 
-    @OneToOne(mappedBy = "sport_facility", cascade=CascadeType.ALL)
-    private Volleyball_arena volleyball_arena;
+    @OneToOne(mappedBy = "sportFacility", cascade=CascadeType.ALL)
+    private VolleyballArena volleyballArena;
 
-    @OneToOne(mappedBy = "sport_facility", cascade=CascadeType.ALL)
-    private Ice_arena ice_arena;
+    @OneToOne(mappedBy = "sportFacility", cascade=CascadeType.ALL)
+    private IceArena iceArena;
 }

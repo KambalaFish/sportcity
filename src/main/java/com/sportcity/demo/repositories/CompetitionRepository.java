@@ -17,4 +17,7 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
     @Query("select distinct c from Competition c join c.organizers s where s.id = :organizerId")
     Page<Competition> getAllCompetitionsByOrganizerId(@Param("organizerId") Integer organizerId, Pageable pageable);
 
+    @Query("select distinct c from Competition  c join c.sportFacilities s where s.id = :sportFacilityId")
+    Page<Competition> getAllCompetitionsBySportFacilityId(@Param("sportFacilityId") Integer sportFacilityId, Pageable pageable);
+
 }

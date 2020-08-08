@@ -16,4 +16,5 @@ public class SportsmanDTO extends AbstractDTO<Integer>{
 
     private List<CoachDTO> coaches = new ArrayList<>();
     private List<CompetitionDTO> competitions = new ArrayList<>();
+    private List<AbilityDTO> abilities = new ArrayList<>();
 }

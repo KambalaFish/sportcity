@@ -8,6 +8,6 @@ import lombok.Setter;
 @Getter
 public class StadiumDTO extends AbstractDTO<Integer>{
 
+    private SportFacilityDTO sportFacility;
     private Integer capacity;
-
 }

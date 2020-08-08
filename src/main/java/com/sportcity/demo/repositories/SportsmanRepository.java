@@ -2,6 +2,7 @@ package com.sportcity.demo.repositories;
 
 import com.sportcity.demo.entities.Ability;
 import com.sportcity.demo.entities.Sportsman;
+import com.sportcity.demo.entities.types.Sport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,5 +22,18 @@ public interface SportsmanRepository extends JpaRepository<Sportsman, Integer> {
 
     @Query("select distinct s from Sportsman s join s.competitions c where c.id = :competitionId")
     Page<Sportsman> getAllSportsmenByCompetitionId(@Param("competitionId") Integer competitionId, Pageable pageable);
+
+
+    @Query("select distinct s from Sportsman s " +
+    "join s.abilities a " +
+    "where (:sport is null or a.sport = :sport) " +
+    "and (:minLevel is null or a.level >= :minLevel)" +
+    "and (:maxLevel is null or a.level <= :maxLevel)")
+    Page<Sportsman> searchByFilter(
+            @Param("sport") Sport sport,
+            @Param("minLevel") Integer minLevel,
+            @Param("maxLevel") Integer maxLevel,
+            Pageable pageable
+    );
 
 }

@@ -18,4 +18,5 @@ public class CompetitionDTO extends AbstractDTO<Integer> {
 
     private List<SportsmanDTO> sportsmen;
     private List<OrganizerDTO> organizers;
+    private List<SportFacilityDTO> sportFacilities;
 }

@@ -42,6 +42,6 @@ public class Competition extends AbstractEntity<Integer> {
             joinColumns = @JoinColumn(name = "competition_id"),
             inverseJoinColumns = @JoinColumn(name = "sport_facilities_id")
     )
-    private List<Sport_facilities> sports_facility;
+    private List<SportFacility> sportFacilities;
 
 }

@@ -1,7 +1,7 @@
 package com.sportcity.demo.mappers;
 
 import com.sportcity.demo.dtos.AbstractDTO;
-import com.sportcity.demo.entities.AbstractEntity;
+import com.sportcity.demo.entities.AbstractEntitySF;
 import lombok.Getter;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 
-public class AbstractMapper<E extends AbstractEntity<ID>, DTO extends AbstractDTO<ID>, ID extends Serializable> implements IMapper<E, DTO, ID> {
+public class AbstractMapperSF<E extends AbstractEntitySF<ID>, DTO extends AbstractDTO<ID>, ID extends Serializable> implements IMapperSF<E, DTO, ID> {
 
     @Getter
     protected ModelMapper mapper;
@@ -26,7 +26,7 @@ public class AbstractMapper<E extends AbstractEntity<ID>, DTO extends AbstractDT
     private Class<DTO> DTOClass;
 
 
-    protected AbstractMapper(ModelMapper mapper, Class<E> entityClass, Class<DTO> DTOClass){
+    protected AbstractMapperSF(ModelMapper mapper, Class<E> entityClass, Class<DTO> DTOClass){
         this.mapper = mapper;
         this.entityClass = entityClass;
         this.DTOClass = DTOClass;

@@ -11,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Volleyball_arena extends AbstractEntity<Integer>{
+public class VolleyballArena extends AbstractEntitySF<Integer>{
 
     @Column(name = "net_height")
     private Integer net_height;
@@ -19,7 +19,7 @@ public class Volleyball_arena extends AbstractEntity<Integer>{
     @Column(name = "net_width")
     private Integer net_width;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")
-    private Sport_facilities sport_facility;
+    private SportFacility sportFacility;
 }

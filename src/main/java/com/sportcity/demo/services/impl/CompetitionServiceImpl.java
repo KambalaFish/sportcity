@@ -1,14 +1,12 @@
 package com.sportcity.demo.services.impl;
 
-import com.sportcity.demo.dtos.CompetitionDTO;
-import com.sportcity.demo.dtos.OrganizerDTO;
-import com.sportcity.demo.dtos.SportsmanDTO;
-import com.sportcity.demo.entities.Competition;
-import com.sportcity.demo.entities.Organizer;
-import com.sportcity.demo.entities.Sportsman;
+import com.sportcity.demo.dtos.*;
+import com.sportcity.demo.entities.*;
 import com.sportcity.demo.mappers.IMapper;
+import com.sportcity.demo.mappers.IMapperSF;
 import com.sportcity.demo.repositories.CompetitionRepository;
 import com.sportcity.demo.repositories.OrganizerRepository;
+import com.sportcity.demo.repositories.SportFacilityRepository;
 import com.sportcity.demo.repositories.SportsmanRepository;
 import com.sportcity.demo.services.CompetitionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +27,17 @@ public class CompetitionServiceImpl extends AbstractService<Competition, Competi
     private final OrganizerRepository organizerRepository;
     private final IMapper<Organizer, OrganizerDTO, Integer> organizerMapper;
 
+    private final SportFacilityRepository sportFacilityRepository;
+    private final IMapperSF<SportFacility, SportFacilityDTO, Integer> sportFacilityMapper;
+
+    private final IMapperSF<Court, CourtDTO, Integer> courtMapper;
+
+    private final IMapperSF<Stadium, StadiumDTO, Integer> stadiumMapper;
+
+    private final IMapperSF<IceArena, IceArenaDTO, Integer> iceArenaMapper;
+
+    private final IMapperSF<VolleyballArena, VolleyballArenaDTO, Integer> volleyballArenaMapper;
+
     @Autowired
     public CompetitionServiceImpl(
             CompetitionRepository repository,
@@ -36,7 +45,13 @@ public class CompetitionServiceImpl extends AbstractService<Competition, Competi
             SportsmanRepository sportsmanRepository,
             IMapper<Sportsman, SportsmanDTO, Integer> sporsmanMapper,
             OrganizerRepository organizerRepository,
-            IMapper<Organizer, OrganizerDTO, Integer> organizerMapper
+            IMapper<Organizer, OrganizerDTO, Integer> organizerMapper,
+            SportFacilityRepository sportFacilityRepository,
+            IMapperSF<SportFacility, SportFacilityDTO, Integer> sportFacilityMapper,
+            IMapperSF<Court, CourtDTO, Integer> courtMapper,
+            IMapperSF<Stadium, StadiumDTO, Integer> stadiumMapper,
+            IMapperSF<IceArena, IceArenaDTO, Integer> iceArenaMapper,
+            IMapperSF<VolleyballArena, VolleyballArenaDTO, Integer> volleyballArenaMapper
             ){
         this.repository = repository;
         this.mapper = mapper;
@@ -44,7 +59,12 @@ public class CompetitionServiceImpl extends AbstractService<Competition, Competi
         this.sportsmanMapper = sporsmanMapper;
         this.organizerRepository = organizerRepository;
         this.organizerMapper = organizerMapper;
-
+        this.sportFacilityRepository = sportFacilityRepository;
+        this.sportFacilityMapper = sportFacilityMapper;
+        this.courtMapper = courtMapper;
+        this.stadiumMapper = stadiumMapper;
+        this.iceArenaMapper = iceArenaMapper;
+        this.volleyballArenaMapper = volleyballArenaMapper;
     }
 
     @Override
@@ -89,5 +109,42 @@ public class CompetitionServiceImpl extends AbstractService<Competition, Competi
 
         repository.save(competition);
         organizerRepository.save(organizer);
+    }
+
+    @Override
+    public Page<SportFacilityDTO> getSportFacilitiesOfTheCompetition(Integer competitionId, Pageable pageable) {
+        return sportFacilityRepository.getSportFacilitiesOfTheCompetition(competitionId, pageable).map(sportFacilityMapper::toDTO);
+    }
+
+    @Override
+    public void removeLinkWithSportFacility(Integer competitionId, Integer sportFacilityId) {
+        Competition competition = repository.findById(competitionId).get();
+        SportFacility sportFacility = sportFacilityRepository.findById(sportFacilityId).get();
+
+        competition.getSportFacilities().remove(sportFacility);
+        sportFacility.getCompetitions().remove(competition);
+
+        repository.save(competition);
+        sportFacilityRepository.save(sportFacility);
+    }
+
+    @Override
+    public Page<CourtDTO> getCourtsOfTheCompetition(Integer competitionId, Pageable pageable) {
+        return sportFacilityRepository.getSportFacilitiesOfTheCompetition(competitionId, pageable).map(sportFacility -> courtMapper.toDTO(sportFacility.getCourt()));
+    }
+
+    @Override
+    public Page<StadiumDTO> getStadiumsOfTheCompetition(Integer competitionId, Pageable pageable) {
+        return sportFacilityRepository.getSportFacilitiesOfTheCompetition(competitionId, pageable).map(sportFacility -> stadiumMapper.toDTO(sportFacility.getStadium()));
+    }
+
+    @Override
+    public Page<IceArenaDTO> getIceArenasOfTheCompetition(Integer competitionId, Pageable pageable) {
+        return sportFacilityRepository.getSportFacilitiesOfTheCompetition(competitionId, pageable).map(sportFacility -> iceArenaMapper.toDTO(sportFacility.getIceArena()));
+    }
+
+    @Override
+    public Page<VolleyballArenaDTO> getVolleyballArenasOfTheCompetition(Integer competitionId, Pageable pageable) {
+        return sportFacilityRepository.getSportFacilitiesOfTheCompetition(competitionId, pageable).map(sportFacility -> volleyballArenaMapper.toDTO(sportFacility.getVolleyballArena()));
     }
 }

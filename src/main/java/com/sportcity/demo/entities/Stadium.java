@@ -10,7 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Stadium extends AbstractEntity<Integer>{
+public class Stadium extends AbstractEntitySF<Integer>{
     /*
     @Id
     @Column(name = "stadium_id")
@@ -25,7 +25,7 @@ public class Stadium extends AbstractEntity<Integer>{
     @PrimaryKeyJoinColumn(name = "stadium_id", referencedColumnName = "facility_id")
     private Sport_facilities sport_facility;
     */
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")
-    private Sport_facilities sport_facility;
+    private SportFacility sportFacility;
 }

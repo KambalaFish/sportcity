@@ -1,8 +1,6 @@
 package com.sportcity.demo.controllers;
 
-import com.sportcity.demo.dtos.CompetitionDTO;
-import com.sportcity.demo.dtos.OrganizerDTO;
-import com.sportcity.demo.dtos.SportsmanDTO;
+import com.sportcity.demo.dtos.*;
 import com.sportcity.demo.services.CompetitionService;
 import com.sportcity.demo.services.Service;
 import org.springframework.data.domain.Page;
@@ -41,6 +39,37 @@ public class CompetitionController extends AbstractController<CompetitionDTO, In
     public ResponseEntity<Void> removeOrganizerFromCompetition(@PathVariable Integer id, @PathVariable Integer organizerId){
         competitionService.removeLinkWithOrganizer(id, organizerId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/sportFacilities")
+    public ResponseEntity<Page<SportFacilityDTO>> getSportFacilities(@PathVariable Integer id, Pageable pageable){
+        return ResponseEntity.ok(competitionService.getSportFacilitiesOfTheCompetition(id, pageable));
+    }
+
+    @PostMapping("/{id}/removeSportFacility/{sportFacilityId}")
+    public ResponseEntity<Void> removeSportFacilityFromCompetition(@PathVariable Integer id, @PathVariable Integer sportFacilityId){
+        competitionService.removeLinkWithSportFacility(id, sportFacilityId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/courts")
+    public ResponseEntity<Page<CourtDTO>> getCourts(@PathVariable Integer id, Pageable pageable){
+        return ResponseEntity.ok(competitionService.getCourtsOfTheCompetition(id, pageable));
+    }
+
+    @GetMapping("/{id}/stadiums")
+    public ResponseEntity<Page<StadiumDTO>> getStadiums(@PathVariable Integer id, Pageable pageable){
+        return ResponseEntity.ok(competitionService.getStadiumsOfTheCompetition(id, pageable));
+    }
+
+    @GetMapping("/{id}/iceArenas")
+    public ResponseEntity<Page<IceArenaDTO>> getIceArenas(@PathVariable Integer id, Pageable pageable){
+        return ResponseEntity.ok(competitionService.getIceArenasOfTheCompetition(id, pageable));
+    }
+
+    @GetMapping("/{id}/volleyballArenas")
+    public ResponseEntity<Page<VolleyballArenaDTO>> getVolleyballArenas(@PathVariable Integer id, Pageable pageable){
+        return ResponseEntity.ok(competitionService.getVolleyballArenasOfTheCompetition(id, pageable));
     }
 
     @Override

@@ -1,8 +1,6 @@
 package com.sportcity.demo.services;
 
-import com.sportcity.demo.dtos.CompetitionDTO;
-import com.sportcity.demo.dtos.OrganizerDTO;
-import com.sportcity.demo.dtos.SportsmanDTO;
+import com.sportcity.demo.dtos.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,4 +12,17 @@ public interface CompetitionService extends Service<CompetitionDTO, Integer>{
     Page<OrganizerDTO> getOrganizersOfTheCompetition(Integer competitionId, Pageable pageable);
 
     void removeLinkWithOrganizer(Integer competitionId, Integer organizerId);
+
+    Page<SportFacilityDTO> getSportFacilitiesOfTheCompetition(Integer competitionId, Pageable pageable);
+
+    void removeLinkWithSportFacility(Integer competitionId, Integer sportFacilityId);
+
+    Page<CourtDTO> getCourtsOfTheCompetition(Integer competitionId, Pageable pageable);
+
+    Page<StadiumDTO> getStadiumsOfTheCompetition(Integer competitionId, Pageable pageable);
+
+    Page<IceArenaDTO> getIceArenasOfTheCompetition(Integer competitionId, Pageable pageable);
+
+    Page<VolleyballArenaDTO> getVolleyballArenasOfTheCompetition(Integer competitionId, Pageable pageable);
+
 }

@@ -1,5 +1,5 @@
 package com.sportcity.demo.entities.types;
 
-public enum Coverage_type {
+public enum CoverageType {
     grass, clay
 }
