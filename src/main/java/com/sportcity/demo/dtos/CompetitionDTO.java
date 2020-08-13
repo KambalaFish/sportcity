@@ -13,7 +13,8 @@ import java.util.List;
 public class CompetitionDTO extends AbstractDTO<Integer> {
 
     private String name;
-    private Date date;
+    private Date beginningDate;
+    private Date finishDate;
     private Sport sport;
 
     private List<SportsmanDTO> sportsmen;

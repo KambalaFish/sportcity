@@ -2,6 +2,7 @@ package com.sportcity.demo.services.impl;
 
 import com.sportcity.demo.dtos.*;
 import com.sportcity.demo.entities.*;
+import com.sportcity.demo.filters.CompetitionFilter;
 import com.sportcity.demo.mappers.IMapper;
 import com.sportcity.demo.mappers.IMapperSF;
 import com.sportcity.demo.repositories.CompetitionRepository;
@@ -146,5 +147,10 @@ public class CompetitionServiceImpl extends AbstractService<Competition, Competi
     @Override
     public Page<VolleyballArenaDTO> getVolleyballArenasOfTheCompetition(Integer competitionId, Pageable pageable) {
         return sportFacilityRepository.getSportFacilitiesOfTheCompetition(competitionId, pageable).map(sportFacility -> volleyballArenaMapper.toDTO(sportFacility.getVolleyballArena()));
+    }
+
+    @Override
+    public Page<CompetitionDTO> search(CompetitionFilter competitionFilter, Pageable pageable) {
+        return repository.searchByFilter(competitionFilter.getMinPeriod(), competitionFilter.getMaxPeriod(), competitionFilter.getOrganizerId(), pageable).map(getMapper()::toDTO);
     }
 }

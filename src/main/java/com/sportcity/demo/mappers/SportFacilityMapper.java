@@ -67,7 +67,6 @@ public class SportFacilityMapper extends AbstractMapperSF<SportFacility, SportFa
             });
         entity.setCompetitions(competitions);
 
-        System.out.println("\n\n############################################\n\nYO I AM HERE BABY\nmapDTOToEntity\n\n\n############################################");
 
         if (dto.getVolleyballArena()!=null){
             //if (volleyballArenaRepository.findById(dto.getId()).isPresent())
@@ -86,11 +85,6 @@ public class SportFacilityMapper extends AbstractMapperSF<SportFacility, SportFa
         }
 
         if(dto.getCourt()!=null){
-            //System.out.println("\n\n############################################\n\nYO I AM HERE BABY\n\n############################################");
-            //if (courtRepository.findById(dto.getId()).isPresent())
-                //entity.setCourt(getEntityByIdOrThrow(courtRepository, dto.getId()));
-            //else{
-                System.out.println("\n\n############################################\n\nYO I AM HERE BABY\nif(dto.getCourtDTO()!=null)\n \ndt\n############################################");
                 Court court = new Court();
                 CourtDTO courtDTO = dto.getCourt();
 
@@ -141,7 +135,8 @@ public class SportFacilityMapper extends AbstractMapperSF<SportFacility, SportFa
             CompetitionDTO competitionDTO = new CompetitionDTO();
             competitionDTO.setId(competition.getId());
             competitionDTO.setName(competition.getName());
-            competitionDTO.setDate(competition.getDate());
+            competitionDTO.setBeginningDate(competition.getBeginningDate());
+            competitionDTO.setFinishDate(competition.getFinishDate());
             competitionDTO.setSport(competition.getSport());
             competitions.add(competitionDTO);
         }

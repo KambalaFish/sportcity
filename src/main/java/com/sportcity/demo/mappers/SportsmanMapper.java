@@ -91,7 +91,8 @@ public class SportsmanMapper extends AbstractMapper<Sportsman, SportsmanDTO, Int
             CompetitionDTO competitionDTO = new CompetitionDTO();
             competitionDTO.setId(competition.getId());
             competitionDTO.setName(competition.getName());
-            competitionDTO.setDate(competition.getDate());
+            competitionDTO.setBeginningDate(competition.getBeginningDate());
+            competitionDTO.setFinishDate(competition.getFinishDate());
             competitionDTO.setSport(competition.getSport());
             competitionsDTO.add(competitionDTO);
         }

@@ -47,7 +47,8 @@ public class OrganizerMapper extends AbstractMapper<Organizer, OrganizerDTO, Int
             competitionDTO.setId(competition.getId());
             competitionDTO.setName(competition.getName());
             competitionDTO.setSport(competition.getSport());
-            competitionDTO.setDate(competition.getDate());
+            competitionDTO.setBeginningDate(competition.getBeginningDate());
+            competitionDTO.setFinishDate(competition.getFinishDate());
             competitionsDTO.add(competitionDTO);
         }
         destination.setCompetitions(competitionsDTO);

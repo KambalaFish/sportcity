@@ -18,8 +18,11 @@ public class Competition extends AbstractEntity<Integer> {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "c_date")
-    private Date date;
+    @Column(name = "beginning_date")
+    private Date beginningDate;
+
+    @Column(name = "finish_date")
+    private Date finishDate;
 
     @Column(name="sport", nullable = false, columnDefinition = "enum('football', 'tennis', 'hockey', 'volleyball')")
     @Enumerated(EnumType.STRING)

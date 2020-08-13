@@ -31,11 +31,11 @@ INSERT INTO `sportcity`.`abilities` (`sportsman_id`, `category`, `sport`) VALUES
 INSERT INTO `sportcity`.`abilities` (`sportsman_id`, `category`, `sport`) VALUES ('7', '6', 'football');
 INSERT INTO `sportcity`.`abilities` (`sportsman_id`, `category`, `sport`) VALUES ('8', '8', 'football');
 
-INSERT INTO `sportcity`.`competition` (`c_date`, `name`, `sport`) VALUES ('2020-01-01', 'Kojany ball', 'football');
-INSERT INTO `sportcity`.`competition` (`c_date`, `name`, `sport`) VALUES ('2020-01-02', 'Wimbledon','tennis');
-INSERT INTO `sportcity`.`competition` (`c_date`, `name`, `sport`) VALUES ('2020-01-03', 'NHL', 'hockey');
-INSERT INTO `sportcity`.`competition` (`c_date`, `name`, `sport`) VALUES ('2020-01-04', 'EuroLeague', 'volleyball');
-INSERT INTO `sportcity`.`competition` (`c_date`, `name`, `sport`) VALUES ('2020-01-05', 'US open', 'tennis');
+INSERT INTO `sportcity`.`competition` (`name`, `beginning_date`, `finish_date`, `sport`) VALUES ('Kozhany myach', '2020-01-01', '2020-02-01', 'football');
+INSERT INTO `sportcity`.`competition` (`name`, `beginning_date`, `finish_date`, `sport`) VALUES ('wimbledon', '2020-01-02', '2020-01-25', 'tennis');
+INSERT INTO `sportcity`.`competition` (`name`, `beginning_date`, `finish_date`, `sport`) VALUES ('NHL', '2020-01-03', '2020-05-06', 'hockey');
+INSERT INTO `sportcity`.`competition` (`name`, `beginning_date`, `finish_date`, `sport`) VALUES ('Euro League', '2020-01-04', '2020-03-04', 'volleyball');
+INSERT INTO `sportcity`.`competition` (`name`, `beginning_date`, `finish_date`, `sport`) VALUES ('US open','2020-02-05', '2020-04-06', 'tennis');
 
 INSERT INTO `sportcity`.`participation` (`sportsman_id`, `competition_id`) VALUES ('1', '1');
 INSERT INTO `sportcity`.`participation` (`sportsman_id`, `competition_id`) VALUES ('2', '2');

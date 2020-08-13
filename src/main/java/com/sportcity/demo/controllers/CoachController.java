@@ -2,6 +2,7 @@ package com.sportcity.demo.controllers;
 
 import com.sportcity.demo.dtos.CoachDTO;
 import com.sportcity.demo.dtos.SportsmanDTO;
+import com.sportcity.demo.filters.CoachFilter;
 import com.sportcity.demo.services.CoachService;
 import com.sportcity.demo.services.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,11 @@ public class CoachController extends AbstractController<CoachDTO, Integer>{
     public ResponseEntity<Void>removeCoachFromSportsman(@PathVariable Integer id, @PathVariable Integer sportsmanId){
         coachService.removeLinkWithSportsman(id, sportsmanId);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<Page<CoachDTO>> search(@RequestBody CoachFilter coachFilter, Pageable pageable){
+        return ResponseEntity.ok(coachService.search(coachFilter, pageable));
     }
 
     @Override

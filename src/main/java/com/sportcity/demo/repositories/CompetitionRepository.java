@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
+
 @Repository
 public interface CompetitionRepository extends JpaRepository<Competition, Integer> {
 
@@ -19,5 +21,12 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
 
     @Query("select distinct c from Competition  c join c.sportFacilities s where s.id = :sportFacilityId")
     Page<Competition> getAllCompetitionsBySportFacilityId(@Param("sportFacilityId") Integer sportFacilityId, Pageable pageable);
+
+    @Query("select distinct c from Competition c " +
+            "left join c.organizers o " +
+            "where (:organizerId is null or o.id = :organizerId) and " +
+            "(:minPeriod is null or c.beginningDate >= :minPeriod) and " +
+            "(:maxPeriod is null or c.finishDate <= :maxPeriod)")
+    Page<Competition> searchByFilter(@Param("minPeriod") Date minPeriod, @Param("maxPeriod") Date maxPeriod, @Param("organizerId") Integer organizerId, Pageable pageable);
 
 }

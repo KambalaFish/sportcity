@@ -8,6 +8,7 @@ import com.sportcity.demo.entities.Ability;
 import com.sportcity.demo.entities.Coach;
 import com.sportcity.demo.entities.Competition;
 import com.sportcity.demo.entities.Sportsman;
+import com.sportcity.demo.entities.types.Sport;
 import com.sportcity.demo.filters.SportsmanFilter;
 import com.sportcity.demo.mappers.IMapper;
 import com.sportcity.demo.repositories.AbilityRepository;
@@ -17,9 +18,13 @@ import com.sportcity.demo.repositories.SportsmanRepository;
 import com.sportcity.demo.services.SportsmanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SportsmanServiceImpl extends AbstractService<Sportsman, SportsmanDTO, Integer> implements SportsmanService {
@@ -104,12 +109,34 @@ public class SportsmanServiceImpl extends AbstractService<Sportsman, SportsmanDT
 
     @Override
     public Page<SportsmanDTO> search(SportsmanFilter filter, Pageable pageable) {
-        return repository.searchByFilter(
+        Page<Sportsman> page = repository.searchByFilter(
                 filter.getSport(),
                 filter.getMinLevel(),
                 filter.getMaxLevel(),
+                filter.getCoachId(),
                 pageable
-        ).map(getMapper()::toDTO);
+        );
+        List<Sportsman> sportsmanList = new ArrayList<>(page.getContent());
+        if(filter.getSportsOfSportsman().size()>1)
+        sportsmanList.removeIf(
+                sportsmanDTO -> {
+                    boolean result = true;
+                    for (Sport sport : filter.getSportsOfSportsman()){
+                            for (Ability ability : sportsmanDTO.getAbilities()){
+                                result = sport == ability.getSport();
+                                if (result)
+                                    break;
+                            }
+                        if (!result)
+                            break;
+                    }
+                    return !result;
+                }
+        );
+
+        Page<Sportsman> pageE = new PageImpl<>(sportsmanList, pageable, sportsmanList.size());
+
+        return pageE.map(getMapper()::toDTO);
     }
 
 }

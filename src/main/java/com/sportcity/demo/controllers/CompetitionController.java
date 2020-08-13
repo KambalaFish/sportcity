@@ -1,6 +1,7 @@
 package com.sportcity.demo.controllers;
 
 import com.sportcity.demo.dtos.*;
+import com.sportcity.demo.filters.CompetitionFilter;
 import com.sportcity.demo.services.CompetitionService;
 import com.sportcity.demo.services.Service;
 import org.springframework.data.domain.Page;
@@ -70,6 +71,11 @@ public class CompetitionController extends AbstractController<CompetitionDTO, In
     @GetMapping("/{id}/volleyballArenas")
     public ResponseEntity<Page<VolleyballArenaDTO>> getVolleyballArenas(@PathVariable Integer id, Pageable pageable){
         return ResponseEntity.ok(competitionService.getVolleyballArenasOfTheCompetition(id, pageable));
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<Page<CompetitionDTO>> search(@RequestBody CompetitionFilter filter, Pageable pageable){
+        return ResponseEntity.ok(competitionService.search(filter, pageable));
     }
 
     @Override

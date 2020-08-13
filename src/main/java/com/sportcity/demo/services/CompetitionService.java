@@ -1,6 +1,7 @@
 package com.sportcity.demo.services;
 
 import com.sportcity.demo.dtos.*;
+import com.sportcity.demo.filters.CompetitionFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -24,5 +25,7 @@ public interface CompetitionService extends Service<CompetitionDTO, Integer>{
     Page<IceArenaDTO> getIceArenasOfTheCompetition(Integer competitionId, Pageable pageable);
 
     Page<VolleyballArenaDTO> getVolleyballArenasOfTheCompetition(Integer competitionId, Pageable pageable);
+
+    Page<CompetitionDTO> search(CompetitionFilter competitionFilter, Pageable pageable);
 
 }

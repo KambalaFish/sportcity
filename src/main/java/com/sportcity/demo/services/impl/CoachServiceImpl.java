@@ -5,6 +5,7 @@ import com.sportcity.demo.dtos.CoachDTO;
 import com.sportcity.demo.dtos.SportsmanDTO;
 import com.sportcity.demo.entities.Coach;
 import com.sportcity.demo.entities.Sportsman;
+import com.sportcity.demo.filters.CoachFilter;
 import com.sportcity.demo.mappers.IMapper;
 import com.sportcity.demo.repositories.CoachRepository;
 import com.sportcity.demo.repositories.SportsmanRepository;
@@ -60,5 +61,10 @@ public class CoachServiceImpl extends AbstractService<Coach, CoachDTO, Integer> 
 
         repository.save(coach);
         sportsmanRepository.save(sportsman);
+    }
+
+    @Override
+    public Page<CoachDTO> search(CoachFilter coachFilter, Pageable pageable) {
+        return repository.searchByFilter(coachFilter.getSport(), pageable).map(getMapper()::toDTO);
     }
 }
