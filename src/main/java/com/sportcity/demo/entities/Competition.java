@@ -47,4 +47,11 @@ public class Competition extends AbstractEntity<Integer> {
     )
     private List<SportFacility> sportFacilities;
 
+    @ManyToMany
+    @JoinTable(
+            name = "prizewinner",
+            joinColumns = @JoinColumn(name = "competition_id"),
+            inverseJoinColumns = @JoinColumn(name = "sportsman_id")
+    )
+    private List<Sportsman> prizeWinners;
 }

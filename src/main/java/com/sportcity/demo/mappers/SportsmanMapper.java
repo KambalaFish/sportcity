@@ -44,10 +44,16 @@ public class SportsmanMapper extends AbstractMapper<Sportsman, SportsmanDTO, Int
     @PostConstruct
     private void setupMapper(){
         skipDTOField(SportsmanDTO::setCoaches);
-        skipDTOField(SportsmanDTO::setAbilities);/*new*/
-        skipEntityField(Sportsman::setAbilities);
         skipEntityField(Sportsman::setCoaches);
+
+        skipDTOField(SportsmanDTO::setAbilities);
+        skipEntityField(Sportsman::setAbilities);
+
+        skipDTOField(SportsmanDTO::setCompetitions); /*new_*/
         skipEntityField(Sportsman::setCompetitions);
+
+        skipDTOField(SportsmanDTO::setWonCompetitions);/*new*/
+        skipEntityField(Sportsman::setWonCompetitions);
     }
 
     protected void mapDTOToEntity(SportsmanDTO sourceDTO, Sportsman destination){
@@ -65,13 +71,19 @@ public class SportsmanMapper extends AbstractMapper<Sportsman, SportsmanDTO, Int
         }
         destination.setCompetitions(competitions);
 
-        /*new*/
         List<Ability> abilities = new ArrayList<>();
         for(AbilityDTO abilityDTO : sourceDTO.getAbilities()){
             Ability ability = getEntityByIdOrThrow(abilityRepository, abilityDTO.getId());
             abilities.add(ability);
         }
         destination.setAbilities(abilities);
+
+        List<Competition> wonCompetitions = new ArrayList<>();
+        for(CompetitionDTO wonCompetitionDTO : sourceDTO.getWonCompetitions()){
+            Competition wonCompetition = getEntityByIdOrThrow(competitionRepository, wonCompetitionDTO.getId());
+            wonCompetitions.add(wonCompetition);
+        }
+        destination.setWonCompetitions(wonCompetitions);
     }
 
     protected void mapEntityToDTO(Sportsman sportsman, SportsmanDTO sportsmanDTO){
@@ -108,6 +120,20 @@ public class SportsmanMapper extends AbstractMapper<Sportsman, SportsmanDTO, Int
             abilitiesDTO.add(abilityDTO);
         }
         sportsmanDTO.setAbilities(abilitiesDTO);
+
+        List<CompetitionDTO> wonCompetitionsDTO = new ArrayList<>();
+        for(Competition wonCompetition : sportsman.getWonCompetitions()){
+            CompetitionDTO dto = new CompetitionDTO();
+            dto.setId(wonCompetition.getId());
+            dto.setName(wonCompetition.getName());
+            dto.setBeginningDate(wonCompetition.getBeginningDate());
+            dto.setFinishDate(wonCompetition.getFinishDate());
+            dto.setSport(wonCompetition.getSport());
+            wonCompetitionsDTO.add(dto);
+        }
+        sportsmanDTO.setWonCompetitions(wonCompetitionsDTO);
+
+
     }
 
 

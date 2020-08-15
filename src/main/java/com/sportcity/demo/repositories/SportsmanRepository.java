@@ -15,8 +15,6 @@ import java.util.List;
 @Repository
 public interface SportsmanRepository extends JpaRepository<Sportsman, Integer> {
 
-    Sportsman getById(Integer id);
-
     @Query("select distinct s from Sportsman s join s.coaches c where c.id = :coachId")
     Page<Sportsman> getAllSportsmenByCoachId(@Param("coachId") Integer coachId, Pageable pageable);
 
@@ -37,5 +35,8 @@ public interface SportsmanRepository extends JpaRepository<Sportsman, Integer> {
             @Param("coachId") Integer coachId,
             Pageable pageable
     );
+
+    @Query("select distinct s from Sportsman s join s.wonCompetitions wc where wc.id = :competitionId")
+    Page<Sportsman> getAllPrizeWinnersOfTheCompetition(@Param("competitionId") Integer competitionId, Pageable pageable);
 
 }

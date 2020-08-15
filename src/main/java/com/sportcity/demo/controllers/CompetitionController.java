@@ -78,6 +78,18 @@ public class CompetitionController extends AbstractController<CompetitionDTO, In
         return ResponseEntity.ok(competitionService.search(filter, pageable));
     }
 
+    @GetMapping("/{id}/prizeWinners")
+    public ResponseEntity<Page<SportsmanDTO>> getPrizeWinners(@PathVariable Integer id, Pageable pageable){
+        return ResponseEntity.ok(competitionService.getPrizeWinnersOfTheCompetition(id, pageable));
+    }
+
+    @PostMapping("/{id}/removePrizeWinner/{prizeWinnerId}")
+    public ResponseEntity<Void> removePrizeWinnerFromCompetition(@PathVariable Integer id, @PathVariable Integer prizeWinnerId){
+        competitionService.removeLinkWithPrizeWinner(id, prizeWinnerId);
+        return ResponseEntity.ok().build();
+
+    }
+
     @Override
     protected Service<CompetitionDTO, Integer> getService() {
         return competitionService;

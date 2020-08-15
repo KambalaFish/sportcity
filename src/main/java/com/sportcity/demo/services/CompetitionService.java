@@ -28,4 +28,8 @@ public interface CompetitionService extends Service<CompetitionDTO, Integer>{
 
     Page<CompetitionDTO> search(CompetitionFilter competitionFilter, Pageable pageable);
 
+    Page<SportsmanDTO> getPrizeWinnersOfTheCompetition(Integer competitionId, Pageable pageable);
+
+    void removeLinkWithPrizeWinner(Integer competitionId, Integer prizeWinnerId);
+
 }

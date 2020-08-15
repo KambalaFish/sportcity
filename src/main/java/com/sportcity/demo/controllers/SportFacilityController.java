@@ -2,6 +2,7 @@ package com.sportcity.demo.controllers;
 
 import com.sportcity.demo.dtos.CompetitionDTO;
 import com.sportcity.demo.dtos.SportFacilityDTO;
+import com.sportcity.demo.filters.CompetitionOfSFFilter;
 import com.sportcity.demo.services.Service;
 import com.sportcity.demo.services.SportFacilityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,10 @@ public class SportFacilityController extends AbstractController<SportFacilityDTO
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/competitionsByFilter")
+    ResponseEntity<Page<CompetitionDTO>> getCompetitionsByFilter(@RequestBody CompetitionOfSFFilter filter, Pageable pageable){
+        return ResponseEntity.ok(sportFacilityService.getCompetitionsOfTheSportFacilityByFilter(filter, pageable));
+    }
 
     @Override
     protected Service<SportFacilityDTO, Integer> getService() {

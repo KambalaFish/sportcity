@@ -40,4 +40,8 @@ public class Sportsman extends AbstractEntity<Integer> {
             inverseJoinColumns = @JoinColumn(name = "competition_id")
     )
     private List<Competition> competitions = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "prizeWinners")
+    private List<Competition> wonCompetitions;
+
 }

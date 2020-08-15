@@ -41,9 +41,11 @@ public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDT
         skipDTOField(CompetitionDTO::setOrganizers);
         skipEntityField(Competition::setOrganizers);
 
-        skipEntityField(Competition::setSportFacilities);
         skipDTOField(CompetitionDTO::setSportFacilities);
+        skipEntityField(Competition::setSportFacilities);
 
+        skipDTOField(CompetitionDTO::setPrizeWinners);
+        skipEntityField(Competition::setPrizeWinners);
     }
 
     protected void mapDTOToEntity(CompetitionDTO sourceDTO, Competition destination){
@@ -62,6 +64,11 @@ public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDT
         if (sourceDTO.getSportFacilities()!=null)
             sourceDTO.getSportFacilities().forEach( sportFacilityDTO -> sportFacilities.add(getEntityByIdOrThrow(sportFacilityRepository, sportFacilityDTO.getId())));
         destination.setSportFacilities(sportFacilities);
+
+        List<Sportsman> prizeWinners = new ArrayList<>();
+        if (sourceDTO.getPrizeWinners()!=null)
+            sourceDTO.getPrizeWinners().forEach(sportsmanDTO -> prizeWinners.add(getEntityByIdOrThrow(sportsmanRepository, sportsmanDTO.getId())));
+        destination.setPrizeWinners(prizeWinners);
     }
 
     @Override
@@ -130,6 +137,16 @@ public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDT
             sportFacilitiesDTO.add(sportFacilityDTO);
         }
         DTO.setSportFacilities(sportFacilitiesDTO);
+
+        List<SportsmanDTO> prizeWinnersDTO = new ArrayList<>();
+        for(Sportsman sportsman : entity.getPrizeWinners()){
+            SportsmanDTO prizeWinnerDTO = new SportsmanDTO();
+            prizeWinnerDTO.setId(sportsman.getId());
+            prizeWinnerDTO.setName(sportsman.getName());
+            prizeWinnerDTO.setClub_name(sportsman.getClub_name());
+            prizeWinnersDTO.add(prizeWinnerDTO);
+        }
+        DTO.setPrizeWinners(prizeWinnersDTO);
     }
 
 }

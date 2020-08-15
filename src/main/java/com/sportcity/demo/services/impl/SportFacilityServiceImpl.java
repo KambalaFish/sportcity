@@ -3,6 +3,7 @@ package com.sportcity.demo.services.impl;
 import com.sportcity.demo.dtos.CompetitionDTO;
 import com.sportcity.demo.dtos.SportFacilityDTO;
 import com.sportcity.demo.entities.*;
+import com.sportcity.demo.filters.CompetitionOfSFFilter;
 import com.sportcity.demo.mappers.CompetitionMapper;
 import com.sportcity.demo.mappers.IMapper;
 import com.sportcity.demo.mappers.IMapperSF;
@@ -78,6 +79,11 @@ public class SportFacilityServiceImpl extends AbstractServiceSF<SportFacility, S
 
         repository.save(sportFacility);
         competitionRepository.save(competition);
+    }
+
+    @Override
+    public Page<CompetitionDTO> getCompetitionsOfTheSportFacilityByFilter(CompetitionOfSFFilter filter, Pageable pageable) {
+        return competitionRepository.getAllCompetitionsBySFFilter(filter.getSportFacilityID(), filter.getSport(), pageable).map(competitionMapper::toDTO);
     }
 
     @Override

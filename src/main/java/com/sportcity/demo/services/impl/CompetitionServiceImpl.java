@@ -151,6 +151,23 @@ public class CompetitionServiceImpl extends AbstractService<Competition, Competi
 
     @Override
     public Page<CompetitionDTO> search(CompetitionFilter competitionFilter, Pageable pageable) {
-        return repository.searchByFilter(competitionFilter.getMinPeriod(), competitionFilter.getMaxPeriod(), competitionFilter.getOrganizerId(), pageable).map(getMapper()::toDTO);
+        return repository.searchByFilter(competitionFilter.getMinPeriod(), competitionFilter.getMaxPeriod(), competitionFilter.getOrganizerId(), competitionFilter.getSport(), pageable).map(getMapper()::toDTO);
+    }
+
+    @Override
+    public Page<SportsmanDTO> getPrizeWinnersOfTheCompetition(Integer competitionId, Pageable pageable) {
+        return sportsmanRepository.getAllPrizeWinnersOfTheCompetition(competitionId, pageable).map(sportsmanMapper::toDTO);
+    }
+
+    @Override
+    public void removeLinkWithPrizeWinner(Integer competitionId, Integer prizeWinnerId) {
+        Competition competition = repository.findById(competitionId).get();
+        Sportsman prizeWinner = sportsmanRepository.findById(prizeWinnerId).get();
+
+        competition.getPrizeWinners().remove(prizeWinner);
+        prizeWinner.getWonCompetitions().remove(competition);
+
+        repository.save(competition);
+        sportsmanRepository.save(prizeWinner);
     }
 }

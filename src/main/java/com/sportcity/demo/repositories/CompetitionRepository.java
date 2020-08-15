@@ -1,6 +1,7 @@
 package com.sportcity.demo.repositories;
 
 import com.sportcity.demo.entities.Competition;
+import com.sportcity.demo.entities.types.Sport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,11 +23,28 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
     @Query("select distinct c from Competition  c join c.sportFacilities s where s.id = :sportFacilityId")
     Page<Competition> getAllCompetitionsBySportFacilityId(@Param("sportFacilityId") Integer sportFacilityId, Pageable pageable);
 
-    @Query("select distinct c from Competition c " +
+    @Query(
+            "select distinct c from Competition c " +
             "left join c.organizers o " +
             "where (:organizerId is null or o.id = :organizerId) and " +
             "(:minPeriod is null or c.beginningDate >= :minPeriod) and " +
-            "(:maxPeriod is null or c.finishDate <= :maxPeriod)")
-    Page<Competition> searchByFilter(@Param("minPeriod") Date minPeriod, @Param("maxPeriod") Date maxPeriod, @Param("organizerId") Integer organizerId, Pageable pageable);
+            "(:maxPeriod is null or c.finishDate <= :maxPeriod) and" +
+            "(:sport is null or c.sport = :sport)"
+    )
+    Page<Competition> searchByFilter(
+            @Param("minPeriod") Date minPeriod,
+            @Param("maxPeriod") Date maxPeriod,
+            @Param("organizerId") Integer organizerId,
+            @Param("sport") Sport sport,
+            Pageable pageable);
 
+
+    @Query(
+            "select distinct c from Competition c join c.sportFacilities sf where " +
+                    "(sf.id = :sportFacilityId) and " +
+                    "(:sport is null or c.sport = :sport)"
+    )
+    Page<Competition> getAllCompetitionsBySFFilter(@Param("sportFacilityId") Integer sportFacilityId, @Param("sport") Sport sport, Pageable pageable);
 }
+
+
