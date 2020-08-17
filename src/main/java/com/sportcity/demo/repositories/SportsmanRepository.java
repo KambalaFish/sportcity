@@ -1,6 +1,5 @@
 package com.sportcity.demo.repositories;
 
-import com.sportcity.demo.entities.Ability;
 import com.sportcity.demo.entities.Sportsman;
 import com.sportcity.demo.entities.types.Sport;
 import org.springframework.data.domain.Page;
@@ -10,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -38,5 +38,19 @@ public interface SportsmanRepository extends JpaRepository<Sportsman, Integer> {
 
     @Query("select distinct s from Sportsman s join s.wonCompetitions wc where wc.id = :competitionId")
     Page<Sportsman> getAllPrizeWinnersOfTheCompetition(@Param("competitionId") Integer competitionId, Pageable pageable);
+
+    /*
+    @Query(
+            "select distinct s from Sportsman s where " +
+                    "(s.club.id = :clubId)"
+    )
+    */
+    @Query(
+            "select  distinct s from Sportsman s join s.competitions c where " +
+                    "(c.beginningDate >= :minPeriod) and " +
+                    "(c.finishDate <= :maxPeriod) and " +
+                    "s.club.id = :clubId"
+    )
+    List<Sportsman> getSportsmenOfTheClubDuringPeriod(@Param("clubId") Integer clubId, @Param("minPeriod") Date minPeriod, @Param("maxPeriod") Date maxPeriod);
 
 }

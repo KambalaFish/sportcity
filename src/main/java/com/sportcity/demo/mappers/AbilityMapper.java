@@ -20,7 +20,7 @@ public class AbilityMapper extends AbstractMapper<Ability, AbilityDTO, Integer>{
     private final SportsmanRepository sportsmanRepository;
 
     @Autowired
-    protected AbilityMapper(ModelMapper mapper, IMapper<Sportsman, SportsmanDTO, Integer> sportsmanMapper, SportsmanRepository sportsmanRepository) {
+    public AbilityMapper(ModelMapper mapper, IMapper<Sportsman, SportsmanDTO, Integer> sportsmanMapper, SportsmanRepository sportsmanRepository) {
         super(mapper, Ability.class, AbilityDTO.class);
         this.sportsmanMapper = sportsmanMapper;
         this.sportsmanRepository = sportsmanRepository;

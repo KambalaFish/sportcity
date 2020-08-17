@@ -19,18 +19,20 @@ public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDT
     private final SportsmanRepository sportsmanRepository;
     private final OrganizerRepository organizerRepository;
     private final SportFacilityRepository sportFacilityRepository;
-
+    private final IMapper<Club, ClubDTO, Integer> clubMapper;
     @Autowired
     public CompetitionMapper(
             ModelMapper mapper,
             SportsmanRepository sportsmanRepository,
             OrganizerRepository organizerRepository,
-            SportFacilityRepository sportFacilityRepository
+            SportFacilityRepository sportFacilityRepository,
+            IMapper<Club, ClubDTO, Integer> clubMapper
     ){
         super(mapper, Competition.class, CompetitionDTO.class);
         this.sportsmanRepository = sportsmanRepository;
         this.organizerRepository = organizerRepository;
         this.sportFacilityRepository = sportFacilityRepository;
+        this.clubMapper = clubMapper;
     }
 
     @PostConstruct
@@ -78,7 +80,8 @@ public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDT
             SportsmanDTO sportsmanDTO = new SportsmanDTO();
             sportsmanDTO.setId(sportsman.getId());
             sportsmanDTO.setName(sportsman.getName());
-            sportsmanDTO.setClub_name(sportsman.getClub_name());
+            sportsmanDTO.setClub(clubMapper.toDTO(sportsman.getClub()));
+            /*sportsmanDTO.setClub_name(sportsman.getClub_name());*/
             sportsmenDTO.add(sportsmanDTO);
         }
         DTO.setSportsmen(sportsmenDTO);
@@ -143,7 +146,8 @@ public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDT
             SportsmanDTO prizeWinnerDTO = new SportsmanDTO();
             prizeWinnerDTO.setId(sportsman.getId());
             prizeWinnerDTO.setName(sportsman.getName());
-            prizeWinnerDTO.setClub_name(sportsman.getClub_name());
+            prizeWinnerDTO.setClub(clubMapper.toDTO(sportsman.getClub()));
+            /*prizeWinnerDTO.setClub_name(sportsman.getClub_name());*/
             prizeWinnersDTO.add(prizeWinnerDTO);
         }
         DTO.setPrizeWinners(prizeWinnersDTO);

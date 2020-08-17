@@ -1,7 +1,9 @@
 package com.sportcity.demo.mappers;
 
+import com.sportcity.demo.dtos.ClubDTO;
 import com.sportcity.demo.dtos.CoachDTO;
 import com.sportcity.demo.dtos.SportsmanDTO;
+import com.sportcity.demo.entities.Club;
 import com.sportcity.demo.entities.Coach;
 import com.sportcity.demo.entities.Sportsman;
 import com.sportcity.demo.repositories.SportsmanRepository;
@@ -17,11 +19,16 @@ import java.util.List;
 public class CoachMapper extends AbstractMapper<Coach, CoachDTO, Integer>{
 
     private final SportsmanRepository sportsmanRepository;
-
+    private final IMapper<Club, ClubDTO, Integer> clubMapper;
     @Autowired
-    public CoachMapper(ModelMapper mapper, SportsmanRepository sportsmanRepository){
+    public CoachMapper(
+            ModelMapper mapper,
+            SportsmanRepository sportsmanRepository,
+            IMapper<Club, ClubDTO, Integer> clubMapper
+    ){
         super(mapper, Coach.class, CoachDTO.class);
         this.sportsmanRepository = sportsmanRepository;
+        this.clubMapper = clubMapper;
     }
 
     @PostConstruct
@@ -36,7 +43,8 @@ public class CoachMapper extends AbstractMapper<Coach, CoachDTO, Integer>{
             SportsmanDTO sportsmanDTO = new SportsmanDTO();
             sportsmanDTO.setId(sportsman.getId());
             sportsmanDTO.setName(sportsman.getName());
-            sportsmanDTO.setClub_name(sportsman.getClub_name());
+            sportsmanDTO.setClub(clubMapper.toDTO(sportsman.getClub()));
+            /*sportsmanDTO.setClub_name(sportsman.getClub_name());*/
 
             sportsmenDTO.add(sportsmanDTO);
         }

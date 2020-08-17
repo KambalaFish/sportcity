@@ -1,13 +1,21 @@
-INSERT INTO `sportcity`.`sportsman` (`name`, `club_name`) VALUES ('Vashenko Ivan Vitalievich', 'Arsenal');
-INSERT INTO `sportcity`.`sportsman` (`name`, `club_name`) VALUES ('Leonov Inokenti Vyachislavovich', 'Spartak');
-INSERT INTO `sportcity`.`sportsman` (`name`, `club_name`) VALUES ('Eskerov Elgar Ivanovich', 'CSKA');
-INSERT INTO `sportcity`.`sportsman` (`name`, `club_name`) VALUES ('Tivikov Konstantin Pavlovich', 'Lokomotiv');
-INSERT INTO `sportcity`.`sportsman` (`name`, `club_name`) VALUES ('Sementin Semen Ilich', 'Chelsea');
-INSERT INTO `sportcity`.`sportsman` (`name`, `club_name`) VALUES ('Savvateev Andrey Andreich', 'Dynamo');
-INSERT INTO `sportcity`.`sportsman` (`name`, `club_name`) VALUES ('Abuov Bek Bekich', 'Dynamo');
-INSERT INTO `sportcity`.`sportsman` (`name`, `club_name`) VALUES ('Shahurdin Konstantin Sixovich', 'Dynamo');
-INSERT INTO `sportcity`.`sportsman` (`name`, `club_name`) VALUES ('Goncharov Nikita Grigorievich', 'CSKA');
-INSERT INTO `sportcity`.`sportsman` (`name`, `club_name`) VALUES ('Tumanov Nikolai Markovich', 'CSKA');
+INSERT INTO `sportcity`.`club` (`name`) VALUES ('Arsenal');
+INSERT INTO `sportcity`.`club` (`name`) VALUES ('Spartak');
+INSERT INTO `sportcity`.`club` (`name`) VALUES ('CSKA');
+INSERT INTO `sportcity`.`club` (`name`) VALUES ('Lokomotiv');
+INSERT INTO `sportcity`.`club` (`name`) VALUES ('Chelsea');
+INSERT INTO `sportcity`.`club` (`name`) VALUES ('Dynamo');
+
+
+INSERT INTO `sportcity`.`sportsman` (`name`, `club_id`) VALUES ('Vashenko Ivan Vitalievich', '1');
+INSERT INTO `sportcity`.`sportsman` (`name`, `club_id`) VALUES ('Leonov Inokenti Vyachislavovich', '2');
+INSERT INTO `sportcity`.`sportsman` (`name`, `club_id`) VALUES ('Eskerov Elgar Ivanovich', '3');
+INSERT INTO `sportcity`.`sportsman` (`name`, `club_id`) VALUES ('Tivikov Konstantin Pavlovich', '4');
+INSERT INTO `sportcity`.`sportsman` (`name`, `club_id`) VALUES ('Sementin Semen Ilich', '5');
+INSERT INTO `sportcity`.`sportsman` (`name`, `club_id`) VALUES ('Savvateev Andrey Andreich', '6');
+INSERT INTO `sportcity`.`sportsman` (`name`, `club_id`) VALUES ('Abuov Bek Bekich', '6');
+INSERT INTO `sportcity`.`sportsman` (`name`, `club_id`) VALUES ('Shahurdin Konstantin Sixovich', '6');
+INSERT INTO `sportcity`.`sportsman` (`name`, `club_id`) VALUES ('Goncharov Nikita Grigorievich', '3');
+INSERT INTO `sportcity`.`sportsman` (`name`, `club_id`) VALUES ('Tumanov Nikolai Markovich', '3');
 
 INSERT INTO `sportcity`.`coach` (`name`, `sport`) VALUES ('Chizhov Nikita Michailovich', 'football');
 INSERT INTO `sportcity`.`coach` (`name`, `sport`) VALUES ('Lebedev Yan Borisovich', 'tennis');

@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 public class SportsmanDTO extends AbstractDTO<Integer>{
     private String name;
-    private String club_name;
+    private ClubDTO club;
 
     private List<CoachDTO> coaches = new ArrayList<>();
     private List<CompetitionDTO> competitions = new ArrayList<>();

@@ -1,18 +1,12 @@
 package com.sportcity.demo.mappers;
 
-import com.sportcity.demo.dtos.AbilityDTO;
-import com.sportcity.demo.dtos.CoachDTO;
-import com.sportcity.demo.dtos.CompetitionDTO;
-import com.sportcity.demo.dtos.SportsmanDTO;
+import com.sportcity.demo.dtos.*;
 import com.sportcity.demo.entities.Ability;
 import com.sportcity.demo.entities.Coach;
 import com.sportcity.demo.entities.Competition;
 import com.sportcity.demo.entities.Sportsman;
 import com.sportcity.demo.entities.types.Sport;
-import com.sportcity.demo.repositories.AbilityRepository;
-import com.sportcity.demo.repositories.CoachRepository;
-import com.sportcity.demo.repositories.CompetitionRepository;
-import com.sportcity.demo.repositories.SportsmanRepository;
+import com.sportcity.demo.repositories.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,18 +21,20 @@ public class SportsmanMapper extends AbstractMapper<Sportsman, SportsmanDTO, Int
     private final CoachRepository coachRepository;
     private final CompetitionRepository competitionRepository;
     private final AbilityRepository abilityRepository;
-
+    private final ClubRepository clubRepository;
     @Autowired
     public SportsmanMapper(
             ModelMapper mapper,
             CoachRepository coachRepository,
             CompetitionRepository competitionRepository,
-            AbilityRepository abilityRepository
+            AbilityRepository abilityRepository,
+            ClubRepository clubRepository
     ){
         super(mapper, Sportsman.class, SportsmanDTO.class);
         this.coachRepository = coachRepository;
         this.competitionRepository = competitionRepository;
         this.abilityRepository = abilityRepository;
+        this.clubRepository = clubRepository;
     }
 
     @PostConstruct
@@ -54,6 +50,9 @@ public class SportsmanMapper extends AbstractMapper<Sportsman, SportsmanDTO, Int
 
         skipDTOField(SportsmanDTO::setWonCompetitions);/*new*/
         skipEntityField(Sportsman::setWonCompetitions);
+
+        skipDTOField(SportsmanDTO::setClub);
+        skipEntityField(Sportsman::setClub);
     }
 
     protected void mapDTOToEntity(SportsmanDTO sourceDTO, Sportsman destination){
@@ -84,6 +83,8 @@ public class SportsmanMapper extends AbstractMapper<Sportsman, SportsmanDTO, Int
             wonCompetitions.add(wonCompetition);
         }
         destination.setWonCompetitions(wonCompetitions);
+
+        destination.setClub(getEntityByIdOrThrow(clubRepository, sourceDTO.getClub().getId()));
     }
 
     protected void mapEntityToDTO(Sportsman sportsman, SportsmanDTO sportsmanDTO){
@@ -133,7 +134,10 @@ public class SportsmanMapper extends AbstractMapper<Sportsman, SportsmanDTO, Int
         }
         sportsmanDTO.setWonCompetitions(wonCompetitionsDTO);
 
-
+        ClubDTO clubDTO = new ClubDTO();
+        clubDTO.setId(sportsman.getClub().getId());
+        clubDTO.setName(sportsman.getClub().getName());
+        sportsmanDTO.setClub(clubDTO);
     }
 
 

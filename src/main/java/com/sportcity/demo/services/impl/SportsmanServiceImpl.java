@@ -117,12 +117,12 @@ public class SportsmanServiceImpl extends AbstractService<Sportsman, SportsmanDT
                 pageable
         );
         List<Sportsman> sportsmanList = new ArrayList<>(page.getContent());
-        if(filter.getSportsOfSportsman().size()>1)
+        if(filter.getSportsOfSportsman().size()>0)
         sportsmanList.removeIf(
-                sportsmanDTO -> {
-                    boolean result = true;
+                sportsman -> {
+                    boolean result = false;
                     for (Sport sport : filter.getSportsOfSportsman()){
-                            for (Ability ability : sportsmanDTO.getAbilities()){
+                            for (Ability ability : sportsman.getAbilities()){
                                 result = sport == ability.getSport();
                                 if (result)
                                     break;
