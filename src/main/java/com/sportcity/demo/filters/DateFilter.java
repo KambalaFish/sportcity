@@ -6,8 +6,7 @@ import lombok.Setter;
 import java.util.Date;
 
 @Getter
-@Setter
-public class ClubFilter {
+public class DateFilter {
     private Date minPeriod;
     private Date maxPeriod;
 }

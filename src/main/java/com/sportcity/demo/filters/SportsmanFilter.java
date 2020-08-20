@@ -4,6 +4,7 @@ import com.sportcity.demo.entities.types.Sport;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -14,4 +15,6 @@ public class SportsmanFilter {
     private Integer maxLevel;
     private Integer coachId;
     private List<Sport> sportsOfSportsman;
+    private Date minPeriod;
+    private Date maxPeriod;
 }

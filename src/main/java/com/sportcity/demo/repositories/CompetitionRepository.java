@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.List;
 
 @Repository
 public interface CompetitionRepository extends JpaRepository<Competition, Integer> {
@@ -42,9 +43,28 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
     @Query(
             "select distinct c from Competition c join c.sportFacilities sf where " +
                     "(sf.id = :sportFacilityId) and " +
-                    "(:sport is null or c.sport = :sport)"
+                    "(:sport is null or c.sport = :sport) and " +
+                    "(:minDate is null or c.beginningDate >= :minDate) and " +
+                    "(:maxDate is null or c.finishDate <= :maxDate)"
     )
-    Page<Competition> getAllCompetitionsBySFFilter(@Param("sportFacilityId") Integer sportFacilityId, @Param("sport") Sport sport, Pageable pageable);
+    Page<Competition> getAllCompetitionsBySFFilter(
+            @Param("sportFacilityId") Integer sportFacilityId,
+            @Param("sport") Sport sport,
+            @Param("minDate") Date minDate,
+            @Param("maxDate") Date maxDate,
+            Pageable pageable
+    );
+
+    @Query("select distinct c from Competition c join c.organizers s where " +
+            "(s.id = :organizerId) and " +
+            "(c.beginningDate >= :minDate) and " +
+            "(c.finishDate <= :maxDate)"
+    )
+    List<Competition> getAllCompetitionOfOrganizerInPeriod(
+            @Param("organizerId") Integer organizerId,
+            @Param("minDate") Date minDate,
+            @Param("maxDate") Date maxDate
+    );
 }
 
 

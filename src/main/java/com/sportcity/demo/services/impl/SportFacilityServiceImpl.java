@@ -81,9 +81,15 @@ public class SportFacilityServiceImpl extends AbstractServiceSF<SportFacility, S
         competitionRepository.save(competition);
     }
 
+    /*13 запрос. думаю, что имелось в виду попадание во внутрь определенного периода дат начала и конца соревнований*/
     @Override
     public Page<CompetitionDTO> getCompetitionsOfTheSportFacilityByFilter(CompetitionOfSFFilter filter, Pageable pageable) {
-        return competitionRepository.getAllCompetitionsBySFFilter(filter.getSportFacilityID(), filter.getSport(), pageable).map(competitionMapper::toDTO);
+        return competitionRepository.getAllCompetitionsBySFFilter(
+                filter.getSportFacilityID(),
+                filter.getSport(),
+                filter.getMinPeriod(),
+                filter.getMaxPeriod(),
+                pageable).map(competitionMapper::toDTO);
     }
 
     @Override

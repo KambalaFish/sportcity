@@ -8,6 +8,6 @@ import lombok.Setter;
 public class IceArenaDTO extends AbstractDTO<Integer>{
 
     private SportFacilityDTO sportFacility;
-    private Integer square;
+    private Double square;
 
 }

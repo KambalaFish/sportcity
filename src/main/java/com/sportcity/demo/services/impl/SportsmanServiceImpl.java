@@ -109,6 +109,7 @@ public class SportsmanServiceImpl extends AbstractService<Sportsman, SportsmanDT
 
     @Override
     public Page<SportsmanDTO> search(SportsmanFilter filter, Pageable pageable) {
+
         Page<Sportsman> page = repository.searchByFilter(
                 filter.getSport(),
                 filter.getMinLevel(),
@@ -117,6 +118,8 @@ public class SportsmanServiceImpl extends AbstractService<Sportsman, SportsmanDT
                 pageable
         );
         List<Sportsman> sportsmanList = new ArrayList<>(page.getContent());
+
+
         if(filter.getSportsOfSportsman().size()>0)
         sportsmanList.removeIf(
                 sportsman -> {
@@ -134,7 +137,25 @@ public class SportsmanServiceImpl extends AbstractService<Sportsman, SportsmanDT
                 }
         );
 
-        Page<Sportsman> pageE = new PageImpl<>(sportsmanList, pageable, sportsmanList.size());
+        if (filter.getMinPeriod()!=null & filter.getMaxPeriod()!=null){
+            sportsmanList.removeIf(
+                    sportsman -> {
+                        boolean result = false;
+                        boolean condition1, condition2;
+                        for (Competition competition : sportsman.getCompetitions()){
+                            condition1 = competition.getBeginningDate().after(filter.getMaxPeriod());
+                            condition2 = competition.getFinishDate().before(filter.getMinPeriod());
+                            if (!condition1 & !condition2){
+                                result = true;
+                                break;
+                            }
+                        }
+                        return result;
+                    }
+            );
+        }
+
+        Page<Sportsman> pageE = new PageImpl<>(sportsmanList, page.getPageable()/*pageable*/, page.getTotalElements()/*sportsmanList.size()*/);
 
         return pageE.map(getMapper()::toDTO);
     }

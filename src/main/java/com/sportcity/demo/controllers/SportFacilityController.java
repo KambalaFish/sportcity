@@ -1,7 +1,9 @@
 package com.sportcity.demo.controllers;
 
+import com.sportcity.demo.dtos.CoachDTO;
 import com.sportcity.demo.dtos.CompetitionDTO;
 import com.sportcity.demo.dtos.SportFacilityDTO;
+import com.sportcity.demo.filters.CoachFilter;
 import com.sportcity.demo.filters.CompetitionOfSFFilter;
 import com.sportcity.demo.services.Service;
 import com.sportcity.demo.services.SportFacilityService;

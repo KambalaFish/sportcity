@@ -4,6 +4,8 @@ import com.sportcity.demo.dtos.CompetitionDTO;
 import com.sportcity.demo.dtos.OrganizerDTO;
 import com.sportcity.demo.entities.Competition;
 import com.sportcity.demo.entities.Organizer;
+import com.sportcity.demo.filters.DateFilter;
+/*import com.sportcity.demo.filters.OrganizerFilter;*/
 import com.sportcity.demo.mappers.IMapper;
 import com.sportcity.demo.repositories.CompetitionRepository;
 import com.sportcity.demo.repositories.OrganizerRepository;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class OrganizerServiceImpl extends AbstractService<Organizer, OrganizerDTO, Integer> implements OrganizerService {
@@ -50,6 +54,14 @@ public class OrganizerServiceImpl extends AbstractService<Organizer, OrganizerDT
 
         repository.save(organizer);
         competitionRepository.save(competition);
+    }
+
+    /*12 запрос, я так понимаю, что проведенных соревнований в течение определенного периода времени,
+    значит дата начала и конца соревнования должна строго лежать внутри указанного периода*/
+    @Override
+    public Integer getNumberOfCompetitionForPeriod(Integer organizerId, DateFilter/*OrganizerFilter*/ filter) {
+        List<Competition> competitions = competitionRepository.getAllCompetitionOfOrganizerInPeriod(organizerId, filter.getMinPeriod(), filter.getMaxPeriod());
+        return competitions.size();
     }
 
     @Override

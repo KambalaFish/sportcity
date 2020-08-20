@@ -8,6 +8,6 @@ import lombok.Setter;
 public class VolleyballArenaDTO extends AbstractDTO<Integer>{
 
     private SportFacilityDTO sportFacility;
-    private Integer net_height;
-    private Integer net_width;
+    private Double net_height;
+    private Double net_width;
 }

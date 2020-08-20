@@ -2,6 +2,8 @@ package com.sportcity.demo.controllers;
 
 import com.sportcity.demo.dtos.CompetitionDTO;
 import com.sportcity.demo.dtos.OrganizerDTO;
+import com.sportcity.demo.filters.DateFilter;
+/*import com.sportcity.demo.filters.OrganizerFilter;*/
 import com.sportcity.demo.services.OrganizerService;
 import com.sportcity.demo.services.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,12 @@ public class OrganizerController extends AbstractController<OrganizerDTO, Intege
     public ResponseEntity<Void> removeCompetitionFromOrganizer(@PathVariable Integer id, @PathVariable Integer competitionId){
         organizerService.removeLinkWithCompetition(id, competitionId);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/numberOfCompetitionForPeriod")
+    public ResponseEntity<Integer> getNumberOfCompetitionForPeriod(@PathVariable Integer id, @RequestBody DateFilter/*OrganizerFilter*/ filter){
+
+        return ResponseEntity.ok(organizerService.getNumberOfCompetitionForPeriod(id, filter));
     }
 
     @Override

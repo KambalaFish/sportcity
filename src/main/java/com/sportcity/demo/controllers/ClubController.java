@@ -1,7 +1,7 @@
 package com.sportcity.demo.controllers;
 
 import com.sportcity.demo.dtos.ClubDTO;
-import com.sportcity.demo.filters.ClubFilter;
+import com.sportcity.demo.filters.DateFilter;
 import com.sportcity.demo.services.ClubService;
 import com.sportcity.demo.services.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,9 @@ public class ClubController extends AbstractController<ClubDTO, Integer>{
     }
 
     @PostMapping("/{id}/numberOfSportsmanInTheClubDuringPeriod")
-    ResponseEntity<Integer> getNumberOfSportsmenOfTheClubDuringPeriod(@PathVariable Integer id, @RequestBody ClubFilter filter){
+    ResponseEntity<Integer> getNumberOfSportsmenOfTheClubDuringPeriod(@PathVariable("id") Integer clubId, @RequestBody DateFilter filter){
         System.out.println("HELLO");
-        return ResponseEntity.ok(clubService.getNumberOfSportsmenOfTheClubDuringPeriod(id, filter));
+        return ResponseEntity.ok(clubService.getNumberOfSportsmenOfTheClubDuringPeriod(clubId, filter));
     }
+
 }

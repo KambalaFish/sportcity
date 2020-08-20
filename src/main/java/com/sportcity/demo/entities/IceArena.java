@@ -15,7 +15,7 @@ public class IceArena extends AbstractEntitySF<Integer>{
 
 
     @Column(name = "square")
-    private Integer square;
+    private Double square;
 
     @OneToOne(cascade=CascadeType.ALL)
     @PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")

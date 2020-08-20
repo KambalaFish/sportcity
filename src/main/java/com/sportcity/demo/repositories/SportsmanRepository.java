@@ -36,6 +36,7 @@ public interface SportsmanRepository extends JpaRepository<Sportsman, Integer> {
             Pageable pageable
     );
 
+
     @Query("select distinct s from Sportsman s join s.wonCompetitions wc where wc.id = :competitionId")
     Page<Sportsman> getAllPrizeWinnersOfTheCompetition(@Param("competitionId") Integer competitionId, Pageable pageable);
 
@@ -52,5 +53,11 @@ public interface SportsmanRepository extends JpaRepository<Sportsman, Integer> {
                     "s.club.id = :clubId"
     )
     List<Sportsman> getSportsmenOfTheClubDuringPeriod(@Param("clubId") Integer clubId, @Param("minPeriod") Date minPeriod, @Param("maxPeriod") Date maxPeriod);
+
+
+    @Query(
+            "select distinct s from Sportsman s where s.club.id = :clubId"
+    )
+    List<Sportsman> getSportsmanOfTheClub(@Param("clubId") Integer clubId);
 
 }

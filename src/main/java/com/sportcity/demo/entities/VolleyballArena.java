@@ -14,10 +14,10 @@ import javax.persistence.*;
 public class VolleyballArena extends AbstractEntitySF<Integer>{
 
     @Column(name = "net_height")
-    private Integer net_height;
+    private Double net_height;
 
     @Column(name = "net_width")
-    private Integer net_width;
+    private Double net_width;
 
     @OneToOne(cascade=CascadeType.ALL)
     @PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")

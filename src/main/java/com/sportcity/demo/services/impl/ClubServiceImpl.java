@@ -2,8 +2,9 @@ package com.sportcity.demo.services.impl;
 
 import com.sportcity.demo.dtos.ClubDTO;
 import com.sportcity.demo.entities.Club;
+import com.sportcity.demo.entities.Competition;
 import com.sportcity.demo.entities.Sportsman;
-import com.sportcity.demo.filters.ClubFilter;
+import com.sportcity.demo.filters.DateFilter;
 import com.sportcity.demo.mappers.IMapper;
 import com.sportcity.demo.repositories.ClubRepository;
 import com.sportcity.demo.repositories.SportsmanRepository;
@@ -45,8 +46,23 @@ public class ClubServiceImpl extends AbstractService<Club, ClubDTO, Integer> imp
     }
 
     @Override
-    public Integer getNumberOfSportsmenOfTheClubDuringPeriod(Integer clubId, ClubFilter filter) {
+    public Integer getNumberOfSportsmenOfTheClubDuringPeriod(Integer clubId, DateFilter filter) {
+        /*
         List<Sportsman> list = sportsmanRepository.getSportsmenOfTheClubDuringPeriod(clubId, filter.getMinPeriod(), filter.getMaxPeriod());
+        return list.size();
+        */
+        List<Sportsman> list = sportsmanRepository.getSportsmanOfTheClub(clubId);
+        list.removeIf(sportsman ->{
+            boolean condition1 = false, condition2 = false;
+            for(Competition competition : sportsman.getCompetitions()){
+                condition1 = competition.getBeginningDate().after(filter.getMaxPeriod());
+                condition2 = competition.getFinishDate().before(filter.getMinPeriod());
+                if (condition1 | condition2)
+                    break;
+            }
+            return condition1 | condition2;
+        }
+        );
         return list.size();
     }
 }
