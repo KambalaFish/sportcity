@@ -57,11 +57,10 @@ public class OrganizerServiceImpl extends AbstractService<Organizer, OrganizerDT
     }
 
     /*12 запрос, я так понимаю, что проведенных соревнований в течение определенного периода времени,
-    значит дата начала и конца соревнования должна строго лежать внутри указанного периода*/
+    значит дата начала и конца соревнования должны лежать внутри указанного периода*/
     @Override
-    public Integer getNumberOfCompetitionForPeriod(Integer organizerId, DateFilter/*OrganizerFilter*/ filter) {
-        List<Competition> competitions = competitionRepository.getAllCompetitionOfOrganizerInPeriod(organizerId, filter.getMinPeriod(), filter.getMaxPeriod());
-        return competitions.size();
+    public Integer getNumberOfCompetitionForPeriod(Integer organizerId, DateFilter filter) {
+        return competitionRepository.getAllCompetitionOfOrganizerInPeriod(organizerId, filter.getMinPeriod(), filter.getMaxPeriod());
     }
 
     @Override

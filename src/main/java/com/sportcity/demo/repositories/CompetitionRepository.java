@@ -24,6 +24,7 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
     @Query("select distinct c from Competition  c join c.sportFacilities s where s.id = :sportFacilityId")
     Page<Competition> getAllCompetitionsBySportFacilityId(@Param("sportFacilityId") Integer sportFacilityId, Pageable pageable);
 
+    /*
     @Query(
             "select distinct c from Competition c " +
             "left join c.organizers o " +
@@ -37,15 +38,35 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
             @Param("maxPeriod") Date maxPeriod,
             @Param("organizerId") Integer organizerId,
             @Param("sport") Sport sport,
-            Pageable pageable);
-
+            Pageable pageable
+    );
+    */
+    @Query(
+            "select distinct c from Competition c " +
+                    "left join c.organizers o " +
+                    "where (:organizerId is null or o.id = :organizerId) and " +
+                    "( " +
+                        "(:minPeriod is null and :maxPeriod is null) or " +
+                        "(c.beginningDate >= :minPeriod and c.finishDate <= :maxPeriod)" +
+                    ") and " +
+                    "(:sport is null or c.sport = :sport)"
+    )
+    Page<Competition> searchByFilter(
+            @Param("minPeriod") Date minPeriod,
+            @Param("maxPeriod") Date maxPeriod,
+            @Param("organizerId") Integer organizerId,
+            @Param("sport") Sport sport,
+            Pageable pageable
+    );
 
     @Query(
             "select distinct c from Competition c join c.sportFacilities sf where " +
                     "(sf.id = :sportFacilityId) and " +
                     "(:sport is null or c.sport = :sport) and " +
-                    "(:minDate is null or c.beginningDate >= :minDate) and " +
-                    "(:maxDate is null or c.finishDate <= :maxDate)"
+                    "( " +
+                        "(:minDate is null and :maxDate is null) or " +
+                        "(c.beginningDate >= :minDate and c.finishDate <= :maxDate) " +
+                    ")"
     )
     Page<Competition> getAllCompetitionsBySFFilter(
             @Param("sportFacilityId") Integer sportFacilityId,
@@ -55,12 +76,14 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
             Pageable pageable
     );
 
-    @Query("select distinct c from Competition c join c.organizers s where " +
+    @Query("select count(distinct c.id) from Competition c join c.organizers s where " +
             "(s.id = :organizerId) and " +
-            "(c.beginningDate >= :minDate) and " +
-            "(c.finishDate <= :maxDate)"
+            "(" +
+                "(:minDate is null and :maxDate is null) or " +
+                "((c.beginningDate >= :minDate) and (c.finishDate <= :maxDate))" +
+            ")"
     )
-    List<Competition> getAllCompetitionOfOrganizerInPeriod(
+    Integer getAllCompetitionOfOrganizerInPeriod(
             @Param("organizerId") Integer organizerId,
             @Param("minDate") Date minDate,
             @Param("maxDate") Date maxDate

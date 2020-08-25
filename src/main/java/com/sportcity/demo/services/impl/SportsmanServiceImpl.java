@@ -17,13 +17,13 @@ import com.sportcity.demo.repositories.CompetitionRepository;
 import com.sportcity.demo.repositories.SportsmanRepository;
 import com.sportcity.demo.services.SportsmanService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import javax.management.Query;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -106,7 +106,8 @@ public class SportsmanServiceImpl extends AbstractService<Sportsman, SportsmanDT
 
         return mapper.toDTO(sportsman);
     }
-
+    /*
+    deprecated
     @Override
     public Page<SportsmanDTO> search(SportsmanFilter filter, Pageable pageable) {
 
@@ -118,24 +119,168 @@ public class SportsmanServiceImpl extends AbstractService<Sportsman, SportsmanDT
                 pageable
         );
         List<Sportsman> sportsmanList = new ArrayList<>(page.getContent());
+        filterSearch(sportsmanList, filter);
 
 
-        if(filter.getSportsOfSportsman().size()>0)
-        sportsmanList.removeIf(
-                sportsman -> {
-                    boolean result = false;
-                    for (Sport sport : filter.getSportsOfSportsman()){
+        while (page.hasNext() & (sportsmanList.size() < pageable.getPageSize())){
+            page = repository.searchByFilter(
+                    filter.getSport(),
+                    filter.getMinLevel(),
+                    filter.getMaxLevel(),
+                    filter.getCoachId(),
+                    page.nextPageable()
+            );
+            List<Sportsman> newPortion = new ArrayList<>(page.getContent());
+            filterSearch(newPortion, filter);
+            sportsmanList.addAll(newPortion);
+        }
+
+        //Page<Sportsman> pageE = new PageImpl<>(sportsmanList, page.getPageable(), page.getTotalElements());
+        Page<Sportsman> pageE = new PageImpl<>(sportsmanList, PageRequest.of(page.getNumber(), sportsmanList.size(), pageable.getSort()), sportsmanList.size());
+        return pageE.map(getMapper()::toDTO);
+    }
+    */
+
+    /*
+    deprecated
+    @Override
+    public Page<SportsmanDTO> search(SportsmanFilter filter, Pageable pageable) {
+
+        Page<Sportsman> page = repository.searchByFilter(
+                filter.getSport(),
+                filter.getMinLevel(),
+                filter.getMaxLevel(),
+                filter.getCoachId(),
+                filter.getSportsOfSportsman(),
+                pageable
+        );
+        List<Sportsman> listForRequest = new ArrayList<>(page.getContent());
+
+        List<Sportsman> totalList = new ArrayList<>(page.getContent());
+
+        filterSearch(listForRequest, filter);
+
+
+        while ( (listForRequest.size() < pageable.getPageSize()) & page.hasNext() ){
+            System.out.println("while ( (listForRequest.size() < pageable.getPageSize()) & page.hasNext() )");
+            page = repository.searchByFilter(
+                    filter.getSport(),
+                    filter.getMinLevel(),
+                    filter.getMaxLevel(),
+                    filter.getCoachId(),
+                    filter.getSportsOfSportsman(),
+                    page.nextPageable()
+            );
+            List<Sportsman> newPortion = new ArrayList<>(page.getContent());
+            filterSearch(newPortion, filter);
+            listForRequest.addAll(newPortion);
+            totalList.addAll(newPortion);
+        }
+
+        while (page.hasNext()){
+            page = repository.searchByFilter(
+                    filter.getSport(),
+                    filter.getMinLevel(),
+                    filter.getMaxLevel(),
+                    filter.getCoachId(),
+                    filter.getSportsOfSportsman(),
+                    page.nextPageable()
+            );
+            List<Sportsman> newPortion = new ArrayList<>(page.getContent());
+            filterSearch(newPortion, filter);
+            totalList.addAll(newPortion);
+        }
+
+        System.out.println(pageable.getPageNumber());
+        System.out.println(totalList.size());
+        System.out.println();
+
+        Page<Sportsman> pageE;
+        if (listForRequest.size()<pageable.getPageSize())
+            pageE = new PageImpl<>(listForRequest, pageable, listForRequest.size());
+        else
+            pageE = new PageImpl<>(
+                    listForRequest,
+                    PageRequest.of(pageable.getPageNumber()+1, listForRequest.size(),
+                            pageable.getSort()
+                    ), totalList.size());
+
+        return pageE.map(getMapper()::toDTO);
+    }
+    */
+
+    @Override
+    public Page<SportsmanDTO> search(SportsmanFilter filter, Pageable pageable) {
+        Page<Sportsman> page;
+
+        if (filter.getSportList() == null){
+            page = repository.searchByFilter(
+                    filter.getSport(),
+                    filter.getMinLevel(),
+                    filter.getMaxLevel(),
+                    filter.getCoachId(),
+                    filter.getMinPeriod(),
+                    filter.getMaxPeriod(),
+                    pageable
+            );
+        } else {
+            page = repository.searchByFilterExtended(
+                    filter.getSport(),
+                    filter.getMinLevel(),
+                    filter.getMaxLevel(),
+                    filter.getCoachId(),
+                    filter.getMinPeriod(),
+                    filter.getMaxPeriod(),
+                    filter.getSportList(),
+                    (long) filter.getSportList().size(),
+                    pageable
+            );
+        }
+        /*
+        if (filter.isSportsmenWithOverOneSport())
+            page = repository.searchByFilterAlternative(
+                    filter.getSport(),
+                    filter.getMinLevel(),
+                    filter.getMaxLevel(),
+                    filter.getCoachId(),
+                    filter.getMinPeriod(),
+                    filter.getMaxPeriod(),
+                    pageable
+            );
+        else
+            page = repository.searchByFilter(
+                    filter.getSport(),
+                    filter.getMinLevel(),
+                    filter.getMaxLevel(),
+                    filter.getCoachId(),
+                    filter.getMinPeriod(),
+                    filter.getMaxPeriod(),
+                    pageable
+            );
+        */
+        return page.map(getMapper()::toDTO);
+    }
+
+    @Deprecated
+    private void filterSearch(List<Sportsman> sportsmanList, SportsmanFilter filter){
+
+        if(filter.getSportList().size()>0)
+            sportsmanList.removeIf(
+                    sportsman -> {
+                        boolean result = false;
+                        for (Sport sport : filter.getSportList()){
                             for (Ability ability : sportsman.getAbilities()){
                                 result = sport == ability.getSport();
                                 if (result)
                                     break;
                             }
-                        if (!result)
-                            break;
+                            if (!result)
+                                break;
+                        }
+                        return !result;
                     }
-                    return !result;
-                }
-        );
+            );
+
 
         if (filter.getMinPeriod()!=null & filter.getMaxPeriod()!=null){
             sportsmanList.removeIf(
@@ -154,10 +299,6 @@ public class SportsmanServiceImpl extends AbstractService<Sportsman, SportsmanDT
                     }
             );
         }
-
-        Page<Sportsman> pageE = new PageImpl<>(sportsmanList, page.getPageable()/*pageable*/, page.getTotalElements()/*sportsmanList.size()*/);
-
-        return pageE.map(getMapper()::toDTO);
     }
 
 }

@@ -14,7 +14,8 @@ public class SportsmanFilter {
     private Integer minLevel;
     private Integer maxLevel;
     private Integer coachId;
-    private List<Sport> sportsOfSportsman;
     private Date minPeriod;
     private Date maxPeriod;
+    private List<Sport> sportList;
+    //private boolean sportsmenWithOverOneSport;
 }

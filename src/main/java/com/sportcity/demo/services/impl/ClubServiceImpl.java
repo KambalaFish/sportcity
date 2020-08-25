@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -48,13 +50,11 @@ public class ClubServiceImpl extends AbstractService<Club, ClubDTO, Integer> imp
     @Override
     public Integer getNumberOfSportsmenOfTheClubDuringPeriod(Integer clubId, DateFilter filter) {
         /*
-        List<Sportsman> list = sportsmanRepository.getSportsmenOfTheClubDuringPeriod(clubId, filter.getMinPeriod(), filter.getMaxPeriod());
-        return list.size();
-        */
         List<Sportsman> list = sportsmanRepository.getSportsmanOfTheClub(clubId);
-        list.removeIf(sportsman ->{
+
+        list.removeIf(sportsman -> {
             boolean condition1 = false, condition2 = false;
-            for(Competition competition : sportsman.getCompetitions()){
+            for (Competition competition : sportsman.getCompetitions()) {
                 condition1 = competition.getBeginningDate().after(filter.getMaxPeriod());
                 condition2 = competition.getFinishDate().before(filter.getMinPeriod());
                 if (condition1 | condition2)
@@ -63,6 +63,11 @@ public class ClubServiceImpl extends AbstractService<Club, ClubDTO, Integer> imp
             return condition1 | condition2;
         }
         );
+
         return list.size();
+        */
+        return sportsmanRepository.getNumberOfSportsmenDuringPeriod(clubId, filter.getMinPeriod(), filter.getMaxPeriod());
     }
+
+
 }

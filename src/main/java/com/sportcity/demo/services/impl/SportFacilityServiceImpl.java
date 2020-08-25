@@ -81,7 +81,7 @@ public class SportFacilityServiceImpl extends AbstractServiceSF<SportFacility, S
         competitionRepository.save(competition);
     }
 
-    /*13 запрос. думаю, что имелось в виду попадание во внутрь определенного периода дат начала и конца соревнований*/
+    /*13 запрос. проведение соревнований в течение определенного периода времени = дата начала и конца соревнования внутри определенного периода*/
     @Override
     public Page<CompetitionDTO> getCompetitionsOfTheSportFacilityByFilter(CompetitionOfSFFilter filter, Pageable pageable) {
         return competitionRepository.getAllCompetitionsBySFFilter(

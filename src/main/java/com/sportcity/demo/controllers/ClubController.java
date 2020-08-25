@@ -26,7 +26,6 @@ public class ClubController extends AbstractController<ClubDTO, Integer>{
 
     @PostMapping("/{id}/numberOfSportsmanInTheClubDuringPeriod")
     ResponseEntity<Integer> getNumberOfSportsmenOfTheClubDuringPeriod(@PathVariable("id") Integer clubId, @RequestBody DateFilter filter){
-        System.out.println("HELLO");
         return ResponseEntity.ok(clubService.getNumberOfSportsmenOfTheClubDuringPeriod(clubId, filter));
     }
 
