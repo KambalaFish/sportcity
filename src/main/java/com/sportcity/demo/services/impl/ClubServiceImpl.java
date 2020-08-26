@@ -49,23 +49,6 @@ public class ClubServiceImpl extends AbstractService<Club, ClubDTO, Integer> imp
 
     @Override
     public Integer getNumberOfSportsmenOfTheClubDuringPeriod(Integer clubId, DateFilter filter) {
-        /*
-        List<Sportsman> list = sportsmanRepository.getSportsmanOfTheClub(clubId);
-
-        list.removeIf(sportsman -> {
-            boolean condition1 = false, condition2 = false;
-            for (Competition competition : sportsman.getCompetitions()) {
-                condition1 = competition.getBeginningDate().after(filter.getMaxPeriod());
-                condition2 = competition.getFinishDate().before(filter.getMinPeriod());
-                if (condition1 | condition2)
-                    break;
-            }
-            return condition1 | condition2;
-        }
-        );
-
-        return list.size();
-        */
         return sportsmanRepository.getNumberOfSportsmenDuringPeriod(clubId, filter.getMinPeriod(), filter.getMaxPeriod());
     }
 

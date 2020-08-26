@@ -44,7 +44,6 @@ public class CoachMapper extends AbstractMapper<Coach, CoachDTO, Integer>{
             sportsmanDTO.setId(sportsman.getId());
             sportsmanDTO.setName(sportsman.getName());
             sportsmanDTO.setClub(clubMapper.toDTO(sportsman.getClub()));
-            /*sportsmanDTO.setClub_name(sportsman.getClub_name());*/
 
             sportsmenDTO.add(sportsmanDTO);
         }

@@ -12,13 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class SportFacility extends AbstractEntitySF<Integer>{
-    /*
-    @Id
-    @Access(value = AccessType.PROPERTY)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
-    */
 
     @ManyToMany(mappedBy = "sportFacilities")
     private List<Competition> competitions;

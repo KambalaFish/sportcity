@@ -81,7 +81,6 @@ public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDT
             sportsmanDTO.setId(sportsman.getId());
             sportsmanDTO.setName(sportsman.getName());
             sportsmanDTO.setClub(clubMapper.toDTO(sportsman.getClub()));
-            /*sportsmanDTO.setClub_name(sportsman.getClub_name());*/
             sportsmenDTO.add(sportsmanDTO);
         }
         DTO.setSportsmen(sportsmenDTO);
@@ -106,7 +105,6 @@ public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDT
                 StadiumDTO stadiumDTO = new StadiumDTO();
                 stadiumDTO.setId(stadium.getId());
                 stadiumDTO.setCapacity(stadium.getCapacity());
-                //stadiumDTO.setSportFacilityDTO(sportFacilityDTO);
                 sportFacilityDTO.setStadium(stadiumDTO);
             }
 
@@ -115,7 +113,6 @@ public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDT
                 IceArenaDTO iceArenaDTO = new IceArenaDTO();
                 iceArenaDTO.setId(iceArena.getId());
                 iceArenaDTO.setSquare(iceArena.getSquare());
-                //iceArenaDTO.setSportFacilityDTO(sportFacilityDTO);
                 sportFacilityDTO.setIceArena(iceArenaDTO);
             }
 
@@ -124,7 +121,6 @@ public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDT
                 CourtDTO courtDTO = new CourtDTO();
                 courtDTO.setId(court.getId());
                 courtDTO.setCoverageType(court.getCoverageType());
-                //courtDTO.setSportFacilityDTO(sportFacilityDTO);
                 sportFacilityDTO.setCourt(courtDTO);
             }
 
@@ -134,7 +130,6 @@ public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDT
                 volleyballArenaDTO.setId(volleyballArena.getId());
                 volleyballArenaDTO.setNet_height(volleyballArena.getNet_height());
                 volleyballArenaDTO.setNet_width(volleyballArena.getNet_width());
-                //volleyballArenaDTO.setSportFacilityDTO(sportFacilityDTO);
                 sportFacilityDTO.setVolleyballArena(volleyballArenaDTO);
             }
             sportFacilitiesDTO.add(sportFacilityDTO);
@@ -147,7 +142,6 @@ public class CompetitionMapper extends AbstractMapper<Competition, CompetitionDT
             prizeWinnerDTO.setId(sportsman.getId());
             prizeWinnerDTO.setName(sportsman.getName());
             prizeWinnerDTO.setClub(clubMapper.toDTO(sportsman.getClub()));
-            /*prizeWinnerDTO.setClub_name(sportsman.getClub_name());*/
             prizeWinnersDTO.add(prizeWinnerDTO);
         }
         DTO.setPrizeWinners(prizeWinnersDTO);

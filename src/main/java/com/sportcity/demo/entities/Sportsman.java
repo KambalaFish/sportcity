@@ -17,10 +17,7 @@ public class Sportsman extends AbstractEntity<Integer> {
 
     @Column(name="name", nullable = false)
     private String name;
-    /*
-    @Column(name="club_name", nullable = false)
-    private String club_name;
-    */
+
     @ManyToOne
     @JoinColumn(name = "club_id", nullable = false)
     private Club club;

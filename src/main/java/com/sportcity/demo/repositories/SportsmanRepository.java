@@ -21,9 +21,7 @@ public interface SportsmanRepository extends JpaRepository<Sportsman, Integer> {
     @Query("select distinct s from Sportsman s join s.competitions c where c.id = :competitionId")
     Page<Sportsman> getAllSportsmenByCompetitionId(@Param("competitionId") Integer competitionId, Pageable pageable);
 
-    /*
-    fact checked! it works!
-    */
+
     @Query("select distinct s from Sportsman s " +
             "left join s.abilities a " +
             "left join s.coaches c " +
@@ -146,36 +144,6 @@ public interface SportsmanRepository extends JpaRepository<Sportsman, Integer> {
 
     @Query("select distinct s from Sportsman s join s.wonCompetitions wc where wc.id = :competitionId")
     Page<Sportsman> getAllPrizeWinnersOfTheCompetition(@Param("competitionId") Integer competitionId, Pageable pageable);
-
-    @Query(
-            "select  distinct s from Sportsman s join s.competitions c where " +
-                    "(c.beginningDate >= :minPeriod) and " +
-                    "(c.finishDate <= :maxPeriod) and " +
-                    "s.club.id = :clubId"
-    )
-    List<Sportsman> getSportsmenOfTheClubDuringPeriod(@Param("clubId") Integer clubId, @Param("minPeriod") Date minPeriod, @Param("maxPeriod") Date maxPeriod);
-
-
-    @Query(
-            "select distinct s from Sportsman s where s.club.id = :clubId"
-    )
-    List<Sportsman> getSportsmanOfTheClub(@Param("clubId") Integer clubId);
-
-    /*
-    @Query(
-            "select count(distinct s.id) from Sportsman s " +
-                    "inner join s.club cl " +
-                    "inner join s.competitions co " +
-                    "where (cl.id = :clubId) and " +
-                    "(:minDate is null or co.beginningDate >= :minDate) and " +
-                    "(:maxDate is null or co.finishDate <= :maxDate)"
-    )
-    Integer getNumberOfSportsmenDuringPeriod(
-            @Param("clubId") Integer clubId,
-            @Param("minDate") Date minDate,
-            @Param("maxDate") Date maxDate
-    );
-    */
 
     @Query(
             "select count(distinct s.id) from Sportsman s " +

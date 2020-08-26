@@ -18,9 +18,6 @@ import java.util.List;
 public class Volleyball_arenaMapper extends AbstractMapperSF<VolleyballArena, VolleyballArenaDTO, Integer>{
 
     @Autowired
-    private SportFacilityRepository sport_facilitiesRepository;
-
-    @Autowired
     private IMapper<Competition, CompetitionDTO, Integer> competitionMapper;
 
     @Autowired
