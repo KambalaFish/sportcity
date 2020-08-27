@@ -212,9 +212,11 @@ public class SportsmanServiceImpl extends AbstractService<Sportsman, SportsmanDT
     @Override
     public Page<SportsmanDTO> search(SportsmanFilter filter, Pageable pageable) {
         Page<Sportsman> page;
-
+        String name = prepareStringToLikeStatement(filter.getName());
         if (filter.getSportList() == null){
             page = repository.searchByFilter(
+                    name,
+                    filter.getClubId(),
                     filter.getSport(),
                     filter.getMinLevel(),
                     filter.getMaxLevel(),
@@ -225,6 +227,8 @@ public class SportsmanServiceImpl extends AbstractService<Sportsman, SportsmanDT
             );
         } else {
             page = repository.searchByFilterExtended(
+                    name,
+                    filter.getClubId(),
                     filter.getSport(),
                     filter.getMinLevel(),
                     filter.getMaxLevel(),

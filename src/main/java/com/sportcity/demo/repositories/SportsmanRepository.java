@@ -25,7 +25,10 @@ public interface SportsmanRepository extends JpaRepository<Sportsman, Integer> {
     @Query("select distinct s from Sportsman s " +
             "left join s.abilities a " +
             "left join s.coaches c " +
-            "where (:sport is null or a.sport = :sport) " +
+            "where " +
+            "(:name is null or lower(s.name) like :name) " +
+            "and (:clubId is null or s.club.id = :id)" +
+            "and (:sport is null or a.sport = :sport) " +
             "and (:minLevel is null or a.level >= :minLevel)" +
             "and (:maxLevel is null or a.level <= :maxLevel)" +
             "and (:coachId is null or c.id = :coachId and c.sport = a.sport) " +
@@ -40,6 +43,8 @@ public interface SportsmanRepository extends JpaRepository<Sportsman, Integer> {
             ")"
     )
     Page<Sportsman> searchByFilter(
+            @Param("name") String name,
+            @Param("clubId") Integer clubId,
             @Param("sport") Sport sport,
             @Param("minLevel") Integer minLevel,
             @Param("maxLevel") Integer maxLevel,
@@ -84,7 +89,10 @@ public interface SportsmanRepository extends JpaRepository<Sportsman, Integer> {
     @Query("select distinct s from Sportsman s " +
             "left join s.abilities a " +
             "left join s.coaches c " +
-            "where (:sport is null or a.sport = :sport) " +
+            "where " +
+            "(:name is null or lower(s.name) like :name) " +
+            "and (:clubId is null or s.club.id = :clubId)" +
+            "and (:sport is null or a.sport = :sport) " +
             "and (:minLevel is null or a.level >= :minLevel)" +
             "and (:maxLevel is null or a.level <= :maxLevel)" +
             "and (:coachId is null or c.id = :coachId and c.sport = a.sport) " +
@@ -105,6 +113,8 @@ public interface SportsmanRepository extends JpaRepository<Sportsman, Integer> {
             ") = :size))"
     )/*может выбирать всех спортсменов, с указанными видами спорта, причем по всем указанным видам спорта разряд должен входить в указанные рамки*/
     Page<Sportsman> searchByFilterExtended(
+            @Param("name") String name,
+            @Param("clubId") Integer clubId,
             @Param("sport") Sport sport,
             @Param("minLevel") Integer minLevel,
             @Param("maxLevel") Integer maxLevel,

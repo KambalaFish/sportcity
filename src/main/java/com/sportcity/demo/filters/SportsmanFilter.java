@@ -10,6 +10,8 @@ import java.util.List;
 @Getter
 @Setter
 public class SportsmanFilter {
+    private String name;
+    private Integer clubId;
     private Sport sport;
     private Integer minLevel;
     private Integer maxLevel;
