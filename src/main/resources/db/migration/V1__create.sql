@@ -23,6 +23,7 @@ USE `sportcity` ;
 CREATE TABLE IF NOT EXISTS `sportcity`.`club` (
                                                   `id` INT NOT NULL AUTO_INCREMENT,
                                                   `name` VARCHAR(100) NOT NULL,
+                                                  `amount_of_members` INT NOT NULL DEFAULT 0,
                                                   PRIMARY KEY (`id`),
                                                   UNIQUE INDEX `name_UNIQUE` (`name` ASC) )
     ENGINE = InnoDB;
@@ -278,6 +279,147 @@ CREATE TABLE IF NOT EXISTS `sportcity`.`prizewinner` (
                                                                  ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
+/*если тренер поменял вид спорта, то все связи с его подопечными удаляются*/
+DELIMITER $$
+create trigger coachSportUpdate
+    after update on coach
+    for each row
+begin
+    if ( NEW.sport != OLD.sport ) then
+        delete from mentoring where (coach_id = OLD.id);
+    end if;
+end $$
+DELIMITER ;
+/*при добавлении нового спортсмена(при добавлении должен быть указан клуб) в указанном клубе прибавляется один участник*/
+DELIMITER $$
+create trigger memberCalculationInserting
+    after insert on sportsman
+    for each row
+begin
+    update club cl
+    set cl.amount_of_members = cl.amount_of_members + 1
+    where cl.id = NEW.club_id;
+end $$
+DELIMITER ;
+
+/*при изменение клуба спортсмена, количество участников у прежнего клуба уменьшается на одного, а у нового увеличивается на одного*/
+DELIMITER $$
+create trigger memberCalculationUpdate
+    after update on `sportcity`.`sportsman`
+    for each row
+begin
+    if (NEW.club_id != OLD.club_id) then
+        update club cl
+        set cl.amount_of_members = cl.amount_of_members + 1
+        where cl.id = NEW.club_id;
+        update club cl
+        set cl.amount_of_members = cl.amount_of_members - 1
+        where cl.id = OLD.club_id;
+    end if;
+end $$
+DELIMITER ;
+
+/*при удалении способности спортсмена удаляется связь с тренерами, которые тренеровали его виду спорта, который был в удаленной способности.
+  также при удалении способности спортсмена будут удаляться связи в таблице participation, то есть участие в соревнованиях по виду спорта, который был в удаленной
+  способности, причем связи с теми соревнованиями, которые будут проходить в будущем или проходят в данный момент (отсчёт от момента удаления curdate() )
+  */
+DELIMITER $$
+create trigger abilityDeletion
+    after delete on sportcity.abilities
+    for each row
+begin
+    delete from mentoring where (
+                                        coach_id in
+                                        (
+                                            select coach_id from (select * from mentoring) as m inner join coach co on co.id = m.coach_id where
+                                                (m.sportsman_id = OLD.sportsman_id and co.sport = OLD.sport)
+                                        )
+                                );
+    delete from participation where (
+                                            competition_id in
+                                            (
+                                                select competition_id from (select * from participation) as p inner join competition c on c.id = p.competition_id where
+                                                    (
+                                                                p.sportsman_id = OLD.sportsman_id and
+                                                                c.sport = OLD.sport and
+                                                                (
+                                                                            c.beginning_date >= curdate() or
+                                                                            (c.beginning_date <= curdate() and curdate() <= c.finish_date)
+                                                                )
+                                                    )
+                                            )
+                                    );
+end $$
+DELIMITER ;
+
+/*считает число спортсменов клуба, участвовавших в соревнованиях в указанный период*/
+DELIMITER $$
+create procedure countNumberOfSportsmenDuringPeriod(clubId integer, minDate date, maxDate date)
+begin
+    select count(distinct s.id) from sportsman s
+                                         inner join club cl on cl.id = s.club_id
+                                         inner join participation p on p.sportsman_id = s.id
+                                         inner join competition co on co.id = p.competition_id
+    where
+            cl.id = clubId and
+        (
+                (minDate is null and maxDate is null) or
+                (
+                        (minDate <= maxDate) and
+                        (
+                                (co.finish_date >= minDate and co.finish_date <= maxDate) or
+                                (co.beginning_date >= minDate and co.beginning_date <= maxDate) or
+                                (co.beginning_date <= minDate and co.finish_date >= maxDate)
+                        )
+                )
+        );
+end $$
+DELIMITER ;
+
+/*если добавляем соревнование с датой начала позже, чем дата конца, то получаем сообщение об ошибке*/
+DELIMITER $$
+create trigger competitionInsertion after insert on competition for each row
+begin
+    if (NEW.beginning_date > NEW.finish_date) then
+        begin
+            signal sqlstate '45000' set message_text = "beginning date is after finish date";
+        end;
+    end if;
+end $$
+DELIMITER ;
+
+/*если изменяем у соревнования дату начала так, что она становится позже даты конца, то получаем сообщение об ошибке*/
+DELIMITER $$
+create trigger competitionUpdate after update on competition for each row
+begin
+    if (NEW.beginning_date > NEW.finish_date) then
+        begin
+            signal sqlstate '45000' set message_text = "beginning date is after finish date";
+        end;
+    end if;
+end $$
+DELIMITER ;
+
+/*если попытаться добавить призера в соревнование, которое еще не началось, то получаем сообщение об ошибке*/
+/*если попытаться добавить в призеры соревнования спортсмена, который в нем не учавствовал, то получаем сообщение об ошибке*/
+DELIMITER $$
+create trigger prizeWinnerInsertion after insert on prizewinner for each row
+begin
+
+    if ( select count(distinct c.id) from competition c
+         where (c.id = new.competition_id) and (c.beginning_date > curdate()) ) then
+        signal sqlstate '45000' set message_text = "competition has not began yet, you can't assign a prize winner";
+    end if;
+
+    if (
+        (select count(distinct p.sportsman_id) from participation p
+        where (p.sportsman_id = new.sportsman_id and p.competition_id = new.competition_id)
+        ) = 0
+    ) then signal sqlstate '45000' set message_text = "The sportsman has not participated in the competition";
+    end if;
+
+end $$
+DELIMITER ;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

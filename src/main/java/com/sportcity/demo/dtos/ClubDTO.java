@@ -10,5 +10,6 @@ import java.util.List;
 @Setter
 public class ClubDTO extends AbstractDTO<Integer>{
     private String name;
+    private Integer amount_of_members;
     private List<SportsmanDTO> sportsmen = new ArrayList<>();
 }

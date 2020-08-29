@@ -17,6 +17,9 @@ public class Club extends AbstractEntity<Integer>{
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "amount_of_members", nullable = false)
+    private Integer amount_of_members;
+
     @OneToMany(mappedBy = "club", fetch = FetchType.LAZY)
     private List<Sportsman> sportsmen = new ArrayList<>();
 }

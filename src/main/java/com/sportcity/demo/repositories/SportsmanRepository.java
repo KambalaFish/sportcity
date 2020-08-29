@@ -154,7 +154,7 @@ public interface SportsmanRepository extends JpaRepository<Sportsman, Integer> {
 
     @Query("select distinct s from Sportsman s join s.wonCompetitions wc where wc.id = :competitionId")
     Page<Sportsman> getAllPrizeWinnersOfTheCompetition(@Param("competitionId") Integer competitionId, Pageable pageable);
-
+    /*
     @Query(
             "select count(distinct s.id) from Sportsman s " +
                     "inner join s.club cl " +
@@ -177,5 +177,11 @@ public interface SportsmanRepository extends JpaRepository<Sportsman, Integer> {
             @Param("minDate") Date minDate,
             @Param("maxDate") Date maxDate
     );
-
+    */
+    @Query(nativeQuery = true, value = "call countNumberOfSportsmenDuringPeriod(:clubId, :minDate, :maxDate)")
+    Integer getNumberOfSportsmenDuringPeriod(
+            @Param("clubId") Integer clubId,
+            @Param("minDate") Date minDate,
+            @Param("maxDate") Date maxDate
+    );
 }
