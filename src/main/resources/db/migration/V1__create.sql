@@ -8,275 +8,275 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema sportcity
+-- Schema nsu20
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema sportcity
+-- Schema nsu20
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `sportcity` ;
-USE `sportcity` ;
+CREATE SCHEMA IF NOT EXISTS `nsu20` ;
+USE `nsu20` ;
 
 -- -----------------------------------------------------
--- Table `sportcity`.`club`
+-- Table `nsu20`.`club`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sportcity`.`club` (
-                                                  `id` INT NOT NULL AUTO_INCREMENT,
-                                                  `name` VARCHAR(100) NOT NULL,
-                                                  `amount_of_members` INT NOT NULL DEFAULT 0,
-                                                  PRIMARY KEY (`id`),
-                                                  UNIQUE INDEX `name_UNIQUE` (`name` ASC) )
+CREATE TABLE IF NOT EXISTS `nsu20`.`club` (
+                                              `id` INT NOT NULL AUTO_INCREMENT,
+                                              `name` VARCHAR(100) NOT NULL,
+                                              `amount_of_members` INT DEFAULT 0 NOT NULL,
+                                              PRIMARY KEY (`id`),
+                                              UNIQUE INDEX `name_UNIQUE` (`name` ASC) )
     ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `sportcity`.`sportsman`
+-- Table `nsu20`.`sportsman`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sportcity`.`sportsman` (
-                                                       `id` INT NOT NULL AUTO_INCREMENT,
-                                                       `name` VARCHAR(100) NOT NULL,
-                                                       `club_id` INT NOT NULL,
-                                                       PRIMARY KEY (`id`),
-                                                       INDEX `fk_sportsman_club1_idx` (`club_id` ASC) ,
-                                                       UNIQUE INDEX `name_UNIQUE` (`name` ASC) ,
-                                                       CONSTRAINT `fk_sportsman_club1`
-                                                           FOREIGN KEY (`club_id`)
-                                                               REFERENCES `sportcity`.`club` (`id`)
-                                                               ON DELETE CASCADE
-                                                               ON UPDATE CASCADE)
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `sportcity`.`coach`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sportcity`.`coach` (
+CREATE TABLE IF NOT EXISTS `nsu20`.`sportsman` (
                                                    `id` INT NOT NULL AUTO_INCREMENT,
                                                    `name` VARCHAR(100) NOT NULL,
-                                                   `sport` ENUM('football', 'tennis', 'hockey', 'volleyball', 'figureSkating', 'athletics') NOT NULL,
+                                                   `club_id` INT NOT NULL,
                                                    PRIMARY KEY (`id`),
-                                                   UNIQUE INDEX `name_UNIQUE` (`name` ASC) )
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `sportcity`.`competition`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sportcity`.`competition` (
-                                                         `id` INT NOT NULL AUTO_INCREMENT,
-                                                         `name` VARCHAR(100) NOT NULL,
-                                                         `beginning_date` DATE NOT NULL,
-                                                         `finish_date` DATE NOT NULL,
-                                                         `sport` ENUM('football', 'tennis', 'hockey', 'volleyball', 'figureSkating', 'athletics') NOT NULL,
-                                                         PRIMARY KEY (`id`),
-                                                         UNIQUE KEY (`name`, `beginning_date`, `finish_date`)
-)
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `sportcity`.`participation`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sportcity`.`participation` (
-                                                           `sportsman_id` INT NOT NULL,
-                                                           `competition_id` INT NOT NULL,
-                                                           PRIMARY KEY (`sportsman_id`, `competition_id`),
-                                                           INDEX `fk_participation_competition1_idx` (`competition_id` ASC) ,
-                                                           CONSTRAINT `fk_participation_sportsman1`
-                                                               FOREIGN KEY (`sportsman_id`)
-                                                                   REFERENCES `sportcity`.`sportsman` (`id`)
-                                                                   ON DELETE CASCADE
-                                                                   ON UPDATE CASCADE,
-                                                           CONSTRAINT `fk_participation_competition1`
-                                                               FOREIGN KEY (`competition_id`)
-                                                                   REFERENCES `sportcity`.`competition` (`id`)
-                                                                   ON DELETE CASCADE
-                                                                   ON UPDATE CASCADE)
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `sportcity`.`organizer`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sportcity`.`organizer` (
-                                                       `id` INT NOT NULL AUTO_INCREMENT,
-                                                       `name` VARCHAR(100) NOT NULL,
-                                                       PRIMARY KEY (`id`),
-                                                       UNIQUE INDEX `name_UNIQUE` (`name` ASC) )
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `sportcity`.`arrangement`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sportcity`.`arrangement` (
-                                                         `competition_id` INT NOT NULL,
-                                                         `organizer_id` INT NOT NULL,
-                                                         PRIMARY KEY (`competition_id`, `organizer_id`),
-                                                         INDEX `fk_arrangement_organizer1_idx` (`organizer_id` ASC) ,
-                                                         CONSTRAINT `fk_arrangement_competition1`
-                                                             FOREIGN KEY (`competition_id`)
-                                                                 REFERENCES `sportcity`.`competition` (`id`)
-                                                                 ON DELETE CASCADE
-                                                                 ON UPDATE CASCADE,
-                                                         CONSTRAINT `fk_arrangement_organizer1`
-                                                             FOREIGN KEY (`organizer_id`)
-                                                                 REFERENCES `sportcity`.`organizer` (`id`)
-                                                                 ON DELETE CASCADE
-                                                                 ON UPDATE CASCADE)
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `sportcity`.`sport_facilities`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sportcity`.`sport_facilities` (
-                                                              `id` INT NOT NULL,
-                                                              PRIMARY KEY (`id`))
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `sportcity`.`location`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sportcity`.`location` (
-                                                      `competition_id` INT NOT NULL,
-                                                      `sport_facilities_id` INT NOT NULL,
-                                                      PRIMARY KEY (`competition_id`, `sport_facilities_id`),
-                                                      INDEX `fk_location_sports_facility1_idx` (`sport_facilities_id` ASC) ,
-                                                      CONSTRAINT `fk_location_competition1`
-                                                          FOREIGN KEY (`competition_id`)
-                                                              REFERENCES `sportcity`.`competition` (`id`)
-                                                              ON DELETE CASCADE
-                                                              ON UPDATE CASCADE,
-                                                      CONSTRAINT `fk_location_sports_facility1`
-                                                          FOREIGN KEY (`sport_facilities_id`)
-                                                              REFERENCES `sportcity`.`sport_facilities` (`id`)
-                                                              ON DELETE CASCADE
-                                                              ON UPDATE CASCADE)
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `sportcity`.`stadium`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sportcity`.`stadium` (
-                                                     `id` INT NOT NULL,
-                                                     `capacity` INT NOT NULL,
-                                                     PRIMARY KEY (`id`),
-                                                     CONSTRAINT `fk_stadium_sports_facility1`
-                                                         FOREIGN KEY (`id`)
-                                                             REFERENCES `sportcity`.`sport_facilities` (`id`)
-                                                             ON DELETE CASCADE
-                                                             ON UPDATE CASCADE)
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `sportcity`.`court`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sportcity`.`court` (
-                                                   `id` INT NOT NULL,
-                                                   `coverage_type` ENUM('grass', 'clay') NOT NULL,
-                                                   PRIMARY KEY (`id`),
-                                                   CONSTRAINT `fk_court_sports_facility1`
-                                                       FOREIGN KEY (`id`)
-                                                           REFERENCES `sportcity`.`sport_facilities` (`id`)
+                                                   INDEX `fk_sportsman_club1_idx` (`club_id` ASC) ,
+                                                   UNIQUE INDEX `name_UNIQUE` (`name` ASC) ,
+                                                   CONSTRAINT `fk_sportsman_club1`
+                                                       FOREIGN KEY (`club_id`)
+                                                           REFERENCES `nsu20`.`club` (`id`)
                                                            ON DELETE CASCADE
                                                            ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `sportcity`.`mentoring`
+-- Table `nsu20`.`coach`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sportcity`.`mentoring` (
+CREATE TABLE IF NOT EXISTS `nsu20`.`coach` (
+                                               `id` INT NOT NULL AUTO_INCREMENT,
+                                               `name` VARCHAR(100) NOT NULL,
+                                               `sport` ENUM('football', 'tennis', 'hockey', 'volleyball', 'figureSkating', 'athletics') NOT NULL,
+                                               PRIMARY KEY (`id`),
+                                               UNIQUE INDEX `name_UNIQUE` (`name` ASC) )
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `nsu20`.`competition`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `nsu20`.`competition` (
+                                                     `id` INT NOT NULL AUTO_INCREMENT,
+                                                     `name` VARCHAR(100) NOT NULL,
+                                                     `beginning_date` DATE NOT NULL,
+                                                     `finish_date` DATE NOT NULL,
+                                                     `sport` ENUM('football', 'tennis', 'hockey', 'volleyball', 'figureSkating', 'athletics') NOT NULL,
+                                                     PRIMARY KEY (`id`),
+                                                     UNIQUE KEY (`name`, `beginning_date`, `finish_date`)
+)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `nsu20`.`participation`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `nsu20`.`participation` (
                                                        `sportsman_id` INT NOT NULL,
-                                                       `coach_id` INT NOT NULL,
-                                                       PRIMARY KEY (`sportsman_id`, `coach_id`),
-                                                       INDEX `fk_mentoring_coach1_idx` (`coach_id` ASC) ,
-                                                       CONSTRAINT `fk_mentoring_sportsman1`
+                                                       `competition_id` INT NOT NULL,
+                                                       PRIMARY KEY (`sportsman_id`, `competition_id`),
+                                                       INDEX `fk_participation_competition1_idx` (`competition_id` ASC) ,
+                                                       CONSTRAINT `fk_participation_sportsman1`
                                                            FOREIGN KEY (`sportsman_id`)
-                                                               REFERENCES `sportcity`.`sportsman` (`id`)
+                                                               REFERENCES `nsu20`.`sportsman` (`id`)
                                                                ON DELETE CASCADE
                                                                ON UPDATE CASCADE,
-                                                       CONSTRAINT `fk_mentoring_coach1`
-                                                           FOREIGN KEY (`coach_id`)
-                                                               REFERENCES `sportcity`.`coach` (`id`)
+                                                       CONSTRAINT `fk_participation_competition1`
+                                                           FOREIGN KEY (`competition_id`)
+                                                               REFERENCES `nsu20`.`competition` (`id`)
                                                                ON DELETE CASCADE
                                                                ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `sportcity`.`ice_arena`
+-- Table `nsu20`.`organizer`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sportcity`.`ice_arena` (
-                                                       `id` INT NOT NULL,
-                                                       `square` DOUBLE NOT NULL,
-                                                       PRIMARY KEY (`id`),
-                                                       CONSTRAINT `fk_ice_arena_sports_facility1`
-                                                           FOREIGN KEY (`id`)
-                                                               REFERENCES `sportcity`.`sport_facilities` (`id`)
-                                                               ON DELETE CASCADE
-                                                               ON UPDATE CASCADE)
+CREATE TABLE IF NOT EXISTS `nsu20`.`organizer` (
+                                                   `id` INT NOT NULL AUTO_INCREMENT,
+                                                   `name` VARCHAR(100) NOT NULL,
+                                                   PRIMARY KEY (`id`),
+                                                   UNIQUE INDEX `name_UNIQUE` (`name` ASC) )
     ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `sportcity`.`volleyball_arena`
+-- Table `nsu20`.`arrangement`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sportcity`.`volleyball_arena` (
-                                                              `id` INT NOT NULL,
-                                                              `net_height` DOUBLE NOT NULL,
-                                                              `net_width` DOUBLE NOT NULL,
-                                                              PRIMARY KEY (`id`),
-                                                              CONSTRAINT `fk_volleyball_arena_sports_facility1`
-                                                                  FOREIGN KEY (`id`)
-                                                                      REFERENCES `sportcity`.`sport_facilities` (`id`)
-                                                                      ON DELETE CASCADE
-                                                                      ON UPDATE CASCADE)
+CREATE TABLE IF NOT EXISTS `nsu20`.`arrangement` (
+                                                     `competition_id` INT NOT NULL,
+                                                     `organizer_id` INT NOT NULL,
+                                                     PRIMARY KEY (`competition_id`, `organizer_id`),
+                                                     INDEX `fk_arrangement_organizer1_idx` (`organizer_id` ASC) ,
+                                                     CONSTRAINT `fk_arrangement_competition1`
+                                                         FOREIGN KEY (`competition_id`)
+                                                             REFERENCES `nsu20`.`competition` (`id`)
+                                                             ON DELETE CASCADE
+                                                             ON UPDATE CASCADE,
+                                                     CONSTRAINT `fk_arrangement_organizer1`
+                                                         FOREIGN KEY (`organizer_id`)
+                                                             REFERENCES `nsu20`.`organizer` (`id`)
+                                                             ON DELETE CASCADE
+                                                             ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `sportcity`.`abilities`
+-- Table `nsu20`.`sport_facilities`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sportcity`.`abilities` (
-                                                       `id` INT NOT NULL AUTO_INCREMENT,
-                                                       `sportsman_id` INT NOT NULL,
-                                                       `category` INT NOT NULL,
-                                                       `sport` ENUM('football', 'tennis', 'hockey', 'volleyball', 'figureSkating', 'athletics') NOT NULL,
-                                                       PRIMARY KEY (`id`),
-                                                       UNIQUE KEY (`sportsman_id`, `category`, `sport`),
-                                                       INDEX `fk_abilities_sportsman1_idx` (`sportsman_id` ASC) ,
-                                                       CONSTRAINT `fk_abilities_sportsman1`
-                                                           FOREIGN KEY (`sportsman_id`)
-                                                               REFERENCES `sportcity`.`sportsman` (`id`)
-                                                               ON DELETE CASCADE
-                                                               ON UPDATE CASCADE)
+CREATE TABLE IF NOT EXISTS `nsu20`.`sport_facilities` (
+                                                          `id` INT NOT NULL,
+                                                          PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `sportcity`.`prizewinner`
+-- Table `nsu20`.`location`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sportcity`.`prizewinner` (
-                                                         `sportsman_id` INT NOT NULL,
-                                                         `competition_id` INT NOT NULL,
-                                                         PRIMARY KEY (`sportsman_id`, `competition_id`),
-                                                         INDEX `fk_sportsman_has_competition_competition1_idx` (`competition_id` ASC) ,
-                                                         INDEX `fk_sportsman_has_competition_sportsman1_idx` (`sportsman_id` ASC) ,
-                                                         CONSTRAINT `fk_sportsman_has_competition_sportsman1`
-                                                             FOREIGN KEY (`sportsman_id`)
-                                                                 REFERENCES `sportcity`.`sportsman` (`id`)
-                                                                 ON DELETE CASCADE
-                                                                 ON UPDATE CASCADE,
-                                                         CONSTRAINT `fk_sportsman_has_competition_competition1`
-                                                             FOREIGN KEY (`competition_id`)
-                                                                 REFERENCES `sportcity`.`competition` (`id`)
-                                                                 ON DELETE CASCADE
-                                                                 ON UPDATE CASCADE)
+CREATE TABLE IF NOT EXISTS `nsu20`.`location` (
+                                                  `competition_id` INT NOT NULL,
+                                                  `sport_facilities_id` INT NOT NULL,
+                                                  PRIMARY KEY (`competition_id`, `sport_facilities_id`),
+                                                  INDEX `fk_location_sports_facility1_idx` (`sport_facilities_id` ASC) ,
+                                                  CONSTRAINT `fk_location_competition1`
+                                                      FOREIGN KEY (`competition_id`)
+                                                          REFERENCES `nsu20`.`competition` (`id`)
+                                                          ON DELETE CASCADE
+                                                          ON UPDATE CASCADE,
+                                                  CONSTRAINT `fk_location_sports_facility1`
+                                                      FOREIGN KEY (`sport_facilities_id`)
+                                                          REFERENCES `nsu20`.`sport_facilities` (`id`)
+                                                          ON DELETE CASCADE
+                                                          ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `nsu20`.`stadium`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `nsu20`.`stadium` (
+                                                 `id` INT NOT NULL,
+                                                 `capacity` INT NOT NULL,
+                                                 PRIMARY KEY (`id`),
+                                                 CONSTRAINT `fk_stadium_sports_facility1`
+                                                     FOREIGN KEY (`id`)
+                                                         REFERENCES `nsu20`.`sport_facilities` (`id`)
+                                                         ON DELETE CASCADE
+                                                         ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `nsu20`.`court`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `nsu20`.`court` (
+                                               `id` INT NOT NULL,
+                                               `coverage_type` ENUM('grass', 'clay') NOT NULL,
+                                               PRIMARY KEY (`id`),
+                                               CONSTRAINT `fk_court_sports_facility1`
+                                                   FOREIGN KEY (`id`)
+                                                       REFERENCES `nsu20`.`sport_facilities` (`id`)
+                                                       ON DELETE CASCADE
+                                                       ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `nsu20`.`mentoring`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `nsu20`.`mentoring` (
+                                                   `sportsman_id` INT NOT NULL,
+                                                   `coach_id` INT NOT NULL,
+                                                   PRIMARY KEY (`sportsman_id`, `coach_id`),
+                                                   INDEX `fk_mentoring_coach1_idx` (`coach_id` ASC) ,
+                                                   CONSTRAINT `fk_mentoring_sportsman1`
+                                                       FOREIGN KEY (`sportsman_id`)
+                                                           REFERENCES `nsu20`.`sportsman` (`id`)
+                                                           ON DELETE CASCADE
+                                                           ON UPDATE CASCADE,
+                                                   CONSTRAINT `fk_mentoring_coach1`
+                                                       FOREIGN KEY (`coach_id`)
+                                                           REFERENCES `nsu20`.`coach` (`id`)
+                                                           ON DELETE CASCADE
+                                                           ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `nsu20`.`ice_arena`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `nsu20`.`ice_arena` (
+                                                   `id` INT NOT NULL,
+                                                   `square` DOUBLE NOT NULL,
+                                                   PRIMARY KEY (`id`),
+                                                   CONSTRAINT `fk_ice_arena_sports_facility1`
+                                                       FOREIGN KEY (`id`)
+                                                           REFERENCES `nsu20`.`sport_facilities` (`id`)
+                                                           ON DELETE CASCADE
+                                                           ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `nsu20`.`volleyball_arena`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `nsu20`.`volleyball_arena` (
+                                                          `id` INT NOT NULL,
+                                                          `net_height` DOUBLE NOT NULL,
+                                                          `net_width` DOUBLE NOT NULL,
+                                                          PRIMARY KEY (`id`),
+                                                          CONSTRAINT `fk_volleyball_arena_sports_facility1`
+                                                              FOREIGN KEY (`id`)
+                                                                  REFERENCES `nsu20`.`sport_facilities` (`id`)
+                                                                  ON DELETE CASCADE
+                                                                  ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `nsu20`.`abilities`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `nsu20`.`abilities` (
+                                                   `id` INT NOT NULL AUTO_INCREMENT,
+                                                   `sportsman_id` INT NOT NULL,
+                                                   `category` INT NOT NULL,
+                                                   `sport` ENUM('football', 'tennis', 'hockey', 'volleyball', 'figureSkating', 'athletics') NOT NULL,
+                                                   PRIMARY KEY (`id`),
+                                                   UNIQUE KEY (`sportsman_id`, `category`, `sport`),
+                                                   INDEX `fk_abilities_sportsman1_idx` (`sportsman_id` ASC) ,
+                                                   CONSTRAINT `fk_abilities_sportsman1`
+                                                       FOREIGN KEY (`sportsman_id`)
+                                                           REFERENCES `nsu20`.`sportsman` (`id`)
+                                                           ON DELETE CASCADE
+                                                           ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `nsu20`.`prizewinner`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `nsu20`.`prizewinner` (
+                                                     `sportsman_id` INT NOT NULL,
+                                                     `competition_id` INT NOT NULL,
+                                                     PRIMARY KEY (`sportsman_id`, `competition_id`),
+                                                     INDEX `fk_sportsman_has_competition_competition1_idx` (`competition_id` ASC) ,
+                                                     INDEX `fk_sportsman_has_competition_sportsman1_idx` (`sportsman_id` ASC) ,
+                                                     CONSTRAINT `fk_sportsman_has_competition_sportsman1`
+                                                         FOREIGN KEY (`sportsman_id`)
+                                                             REFERENCES `nsu20`.`sportsman` (`id`)
+                                                             ON DELETE CASCADE
+                                                             ON UPDATE CASCADE,
+                                                     CONSTRAINT `fk_sportsman_has_competition_competition1`
+                                                         FOREIGN KEY (`competition_id`)
+                                                             REFERENCES `nsu20`.`competition` (`id`)
+                                                             ON DELETE CASCADE
+                                                             ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 /*если тренер поменял вид спорта, то все связи с его подопечными удаляются*/
@@ -305,7 +305,7 @@ DELIMITER ;
 /*при изменение клуба спортсмена, количество участников у прежнего клуба уменьшается на одного, а у нового увеличивается на одного*/
 DELIMITER $$
 create trigger memberCalculationUpdate
-    after update on `sportcity`.`sportsman`
+    after update on `nsu20`.`sportsman`
     for each row
 begin
     if (NEW.club_id != OLD.club_id) then
@@ -319,13 +319,24 @@ begin
 end $$
 DELIMITER ;
 
+DELIMITER $$
+create trigger memberCalculationDelete
+    after delete on `nsu20`.`sportsman`
+    for each row
+begin
+    update club cl
+    set cl.amount_of_members = cl.amount_of_members - 1
+    where cl.id = OLD.club_id;
+end $$
+DELIMITER ;
+
 /*при удалении способности спортсмена удаляется связь с тренерами, которые тренеровали его виду спорта, который был в удаленной способности.
   также при удалении способности спортсмена будут удаляться связи в таблице participation, то есть участие в соревнованиях по виду спорта, который был в удаленной
   способности, причем связи с теми соревнованиями, которые будут проходить в будущем или проходят в данный момент (отсчёт от момента удаления curdate() )
   */
 DELIMITER $$
 create trigger abilityDeletion
-    after delete on sportcity.abilities
+    after delete on nsu20.abilities
     for each row
 begin
     delete from mentoring where (
@@ -334,7 +345,7 @@ begin
                                             select coach_id from (select * from mentoring) as m inner join coach co on co.id = m.coach_id where
                                                 (m.sportsman_id = OLD.sportsman_id and co.sport = OLD.sport)
                                         )
-                                );
+                                    );
     delete from participation where (
                                             competition_id in
                                             (
@@ -345,10 +356,10 @@ begin
                                                                 (
                                                                             c.beginning_date >= curdate() or
                                                                             (c.beginning_date <= curdate() and curdate() <= c.finish_date)
-                                                                )
-                                                    )
+                                                                    )
+                                                        )
                                             )
-                                    );
+                                        );
 end $$
 DELIMITER ;
 
@@ -370,9 +381,9 @@ begin
                                 (co.finish_date >= minDate and co.finish_date <= maxDate) or
                                 (co.beginning_date >= minDate and co.beginning_date <= maxDate) or
                                 (co.beginning_date <= minDate and co.finish_date >= maxDate)
-                        )
-                )
-        );
+                            )
+                    )
+            );
 end $$
 DELIMITER ;
 
@@ -412,10 +423,10 @@ begin
     end if;
 
     if (
-        (select count(distinct p.sportsman_id) from participation p
-        where (p.sportsman_id = new.sportsman_id and p.competition_id = new.competition_id)
-        ) = 0
-    ) then signal sqlstate '45000' set message_text = "The sportsman has not participated in the competition";
+            (select count(distinct p.sportsman_id) from participation p
+             where (p.sportsman_id = new.sportsman_id and p.competition_id = new.competition_id)
+            ) = 0
+        ) then signal sqlstate '45000' set message_text = "The sportsman has not participated in the competition";
     end if;
 
 end $$
